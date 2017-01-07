@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.example.karan.popularmovies"
         minSdkVersion 15
@@ -10,6 +10,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Please ensure you have a valid API KEY for themoviedb.org to use this app
+        // A valid key will need to be entered
+        buildConfigField("String", "TMDb_API_KEY", TMDb_API_KEY)
     }
     buildTypes {
         release {
@@ -21,9 +25,18 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.squareup.picasso:picasso:2.5.2"
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okio:okio:1.11.0'
+    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
+}
+
+repositories {
+    mavenCentral()
 }
