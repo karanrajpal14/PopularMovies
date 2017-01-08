@@ -2,6 +2,7 @@ package com.example.karan.popularmovies;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,17 +24,6 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
     private ArrayList<JSONObject> movies;
     private Context context;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView movieName;
-        ImageView moviePoster;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            movieName = (TextView) itemView.findViewById(R.id.text_view_movie_name);
-            moviePoster = (ImageView) itemView.findViewById(R.id.image_view_poster);
-        }
-    }
-
     public DiscoverMovieAdapter(Context context, ArrayList<JSONObject> movies) {
         this.context = context;
         this.movies = movies;
@@ -43,6 +33,7 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
         String title = "Empty title";
         try {
             title = movie.getString("title");
+            Log.d("Movie title", title);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -54,6 +45,7 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
         String posterPath = "Empty Poster Path";
         try {
             posterPath = base_url + movie.getString("poster_path");
+            Log.d("Movie title", posterPath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -64,7 +56,7 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
     public void onBindViewHolder(ViewHolder holder, int position) {
         JSONObject movie = movies.get(position);
         holder.movieName.setText(getMovieName(movie));
-        Picasso.with(context).load(getMoviePosterURL(movie)).resize(240, 120).into(holder.moviePoster);
+        Picasso.with(context).load(getMoviePosterURL(movie)).into(holder.moviePoster);
     }
 
     @Override
@@ -76,5 +68,16 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView movieName;
+        ImageView moviePoster;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            movieName = (TextView) itemView.findViewById(R.id.text_view_movie_name);
+            moviePoster = (ImageView) itemView.findViewById(R.id.image_view_poster);
+        }
     }
 }

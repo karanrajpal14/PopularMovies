@@ -23,11 +23,11 @@ import okhttp3.Response;
 
 class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
 
-    private Context context;
-    private ArrayList<JSONObject> movies = new ArrayList<>();
-    private ArrayList<String> posters = new ArrayList<>();
-    private FetchMovieDetailsResponse delegate;
     private static final String TMDb_APi_KEY = BuildConfig.TMDb_API_KEY;
+    Context context;
+    ArrayList<JSONObject> movies = new ArrayList<>();
+    ArrayList<String> posters = new ArrayList<>();
+    FetchMovieDetailsResponse delegate;
 
     /*private ArrayList<String> movieCovers() {
         //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
@@ -61,12 +61,12 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
         } catch (IOException e) {
             Log.e("Stacktrace", e.toString());
         }
-        //Log.d("Response body", "\n" + request.url());
+        Log.d("Response body", "\n" + request.url());
 
         try {
             responseJSONObject = new JSONObject(responseBody);
             resultsArray = responseJSONObject.getJSONArray("results");
-            //Log.d("Results array: ",resultsArray.toString());
+            Log.d("Results array: ", resultsArray.toString());
             for (int i = 0; i < resultsArray.length(); i++) {
                 movies.add(responseJSONObject.getJSONArray("results").getJSONObject(i));
                 //Log.d("Poster path: ", movies.get(i).getString("poster_path"));
@@ -79,6 +79,8 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
     @Override
     protected void onPostExecute(ArrayList<JSONObject> movies) {
         super.onPostExecute(movies);
+        Log.d("FMT", "Sending movies back");
+        Log.d("FMT", movies.toString());
         delegate.onFetchFinish(movies);
     }
 
@@ -86,6 +88,6 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
     protected ArrayList<JSONObject> doInBackground(Void... voids) {
         setMoviesArrayList();
         //movieCovers();
-        return null;
+        return movies;
     }
 }
