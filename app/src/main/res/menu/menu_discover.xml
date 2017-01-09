@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/sort_group"
+        android:enabled="true"
+        android:orderInCategory="2"
+        android:visible="true">
+        <item
+            android:id="@+id/most_popular"
+            android:title="@string/menu_sort_most_popular" />
+        <item
+            android:id="@+id/highest_rated"
+            android:title="@string/menu_sort_highest_rated" />
+    </group>
+
+</menu>
