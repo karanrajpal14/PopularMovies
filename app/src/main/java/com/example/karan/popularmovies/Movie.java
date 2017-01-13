@@ -2,6 +2,7 @@ package com.example.karan.popularmovies;
 
 
 public class Movie {
+    private String movieID;
     private String movieTitle;
     private String moviePosterURL;
 

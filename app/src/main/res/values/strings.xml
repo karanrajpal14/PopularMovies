@@ -3,4 +3,11 @@
 
     <string name="menu_sort_most_popular">Most Popular</string>
     <string name="menu_sort_highest_rated">Highest Rated</string>
+
+    <string name="pref_sorting_popular_key">most_popular</string>
+    <string name="pref_sorting_popular_default_value">popular</string>
+
+    <string name="pref_sorting_top_rated_key">top_rated</string>
+    <string name="perf_sorting_top_rated_value">top_rated</string>
+
 </resources>

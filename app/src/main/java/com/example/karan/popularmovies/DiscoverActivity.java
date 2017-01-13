@@ -1,6 +1,11 @@
 package com.example.karan.popularmovies;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,24 +29,29 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_discover);
         setSupportActionBar(toolbar);
 
-        fetchMoviesTask.delegate = this;
-        fetchMoviesTask.execute("popularity.desc");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_discover);
-        recyclerView.setHasFixedSize(true);
+        if (isOnline()) {
+            fetchMoviesTask.delegate = this;
+            fetchMoviesTask.execute(sortingCriteria);
 
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
-        recyclerView.setLayoutManager(layoutManager);
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_view_discover);
+            recyclerView.setHasFixedSize(true);
 
-        //DiscoverMovieAdapter movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movieArrayList);
-        recyclerView.setAdapter(movieAdapter);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+            recyclerView.setLayoutManager(layoutManager);
+
+            recyclerView.setAdapter(movieAdapter);
+        } else
+            Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+
         Log.d("Adapter Set", "test");
     }
 
@@ -53,17 +64,29 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        //popularity.desc
+
         if (id == R.id.highest_rated) {
-            FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-            fetchMoviesTask.delegate = this;
-            fetchMoviesTask.execute("vote_count.desc");
-            movieAdapter.clearData();
+            if (isOnline()) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_top_rated_key), getString(R.string.perf_sorting_top_rated_value));
+
+                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+                fetchMoviesTask.delegate = this;
+                fetchMoviesTask.execute(sortingCriteria);
+                movieAdapter.clearData();
+            } else
+                Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
         } else if (id == R.id.most_popular) {
-            FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
-            fetchMoviesTask.delegate = this;
-            fetchMoviesTask.execute("popularity.desc");
-            movieAdapter.clearData();
+            if (isOnline()) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
+
+                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+                fetchMoviesTask.delegate = this;
+                fetchMoviesTask.execute(sortingCriteria);
+                movieAdapter.clearData();
+            } else
+                Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
         }
         Log.d("Item id", String.valueOf(item.getTitle()));
         return super.onOptionsItemSelected(item);
@@ -83,5 +106,11 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         }
         movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList);
         recyclerView.setAdapter(movieAdapter);
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 }
