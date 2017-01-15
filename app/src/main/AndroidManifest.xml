@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.karan.popularmovies">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -17,6 +17,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/activity_detail_name"
+            android:parentActivityName=".DiscoverActivity">
+            <meta-data
+                android:name="android.support.DiscoverActivity"
+                android:value="com.example.karan.popularmovies.DiscoverActivity" />
         </activity>
     </application>
 

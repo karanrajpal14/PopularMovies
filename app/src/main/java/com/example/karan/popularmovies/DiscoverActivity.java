@@ -18,14 +18,23 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DiscoverActivity extends AppCompatActivity implements FetchMovieDetailsResponse {
 
     ArrayList<Movie> movieArrayList = new ArrayList<>();
     FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
     RecyclerView recyclerView;
-    DiscoverMovieAdapter movieAdapter = new DiscoverMovieAdapter(getBaseContext(), new ArrayList<Movie>());
+    DiscoverMovieAdapter movieAdapter = new DiscoverMovieAdapter(getBaseContext(), new ArrayList<Movie>(), new OnPosterClickListener() {
+        @Override
+        public void onPosterClick(Movie movie) {
+            Toast.makeText(getApplicationContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
+            Log.d("Movie Title onClick", movie.getTitle());
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +104,25 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     @Override
     public void onFetchFinish(ArrayList<JSONObject> movies) {
         Movie m;
-        String base_url = "http://image.tmdb.org/t/p/w185/";
+        String base_url = "http://image.tmdb.org/t/p/w342/";
+        //TODO: Remove base URL from here and use it separately while inflating the view or resize the cached poster as thumbnail for detail activity
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("YYYY-MM-dd", Locale.getDefault());
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd, MMM YYYY", Locale.getDefault());
         for (int i = 1; i < movies.size(); i++) {
             try {
-                m = new Movie(movies.get(i).getString("title"), base_url + movies.get(i).getString("poster_path"));
+                m = new Movie(movies.get(i).getString("id"), movies.get(i).getString("title"), base_url + movies.get(i).getString("poster_path"), inputDateFormat.parse(movies.get(i).getString("release_date")), movies.get(i).getString("vote_average"), movies.get(i).getString("overview"));
                 movieArrayList.add(m);
-            } catch (JSONException e) {
+            } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
         }
-        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList);
+        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
+            @Override
+            public void onPosterClick(Movie movie) {
+                Toast.makeText(getApplicationContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
+                Log.d("Movie Title onClick", movie.getTitle());
+            }
+        });
         recyclerView.setAdapter(movieAdapter);
     }
 

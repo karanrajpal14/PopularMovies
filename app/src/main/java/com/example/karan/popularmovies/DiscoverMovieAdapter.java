@@ -15,17 +15,20 @@ import java.util.ArrayList;
 public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdapter.ViewHolder> {
     private ArrayList<Movie> movieArrayList;
     private Context context;
+    private OnPosterClickListener onPosterClickListener;
 
-    public DiscoverMovieAdapter(Context context, ArrayList<Movie> movieArrayList) {
+    public DiscoverMovieAdapter(Context context, ArrayList<Movie> movieArrayList, OnPosterClickListener onPosterClickListener) {
         this.context = context;
         this.movieArrayList = movieArrayList;
+        this.onPosterClickListener = onPosterClickListener;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Movie m = movieArrayList.get(position);
-        holder.movieName.setText(m.getMovieTitle());
-        Picasso.with(context).load(m.getMoviePosterURL()).into(holder.moviePoster);
+        holder.bind(movieArrayList.get(position), onPosterClickListener);
+        /*Movie m = movieArrayList.get(position);
+        holder.movieName.setText(m.getTitle());
+        Picasso.with(context).load(m.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width,R.dimen.activity_discover_poster_height).into(holder.moviePoster);*/
     }
 
     @Override
@@ -45,7 +48,6 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
             for (int i = 0; i < size; i++) {
                 this.movieArrayList.remove(0);
             }
-
             this.notifyItemRangeRemoved(0, size);
         }
     }
@@ -58,6 +60,17 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
             super(itemView);
             movieName = (TextView) itemView.findViewById(R.id.text_view_movie_name);
             moviePoster = (ImageView) itemView.findViewById(R.id.image_view_poster);
+        }
+
+        public void bind(final Movie movie, final OnPosterClickListener onPosterClickListener) {
+            movieName.setText(movie.getTitle());
+            Picasso.with(context).load(movie.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height).into(moviePoster);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onPosterClickListener.onPosterClick(movie);
+                }
+            });
         }
     }
 }

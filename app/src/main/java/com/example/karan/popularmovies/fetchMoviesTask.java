@@ -1,6 +1,7 @@
 package com.example.karan.popularmovies;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,33 +18,17 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by karan on 07-Jan-17.
- */
-
-class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
+class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
 
     private static final String TMDb_APi_KEY = BuildConfig.TMDb_API_KEY;
+    private final String LANGUAGE_PARAM = "language";
+    private final String API_KEY_PARAM = "api_key";
+    private final String PAGE_PARAM = "page";
     Context context;
-    ArrayList<JSONObject> movies = new ArrayList<>();
-    ArrayList<String> posters = new ArrayList<>();
     FetchMovieDetailsResponse delegate;
+    private ArrayList<JSONObject> movies = new ArrayList<>();
 
-    /*private ArrayList<String> movieCovers() {
-        //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
-        String base_url = "http://image.tmdb.org/t/p/w185/";
-        for (int i = 0; i < movies.size(); i++) {
-            try {
-                posters.add(movies.get(i).getString("poster_path"));
-                Log.d("Poster full path", i + " " + base_url + posters.get(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return posters;
-    }*/
-
-    private void setMoviesArrayList() {
+    private void setMoviesArrayList(String TMDbURL) {
         OkHttpClient client = new OkHttpClient();
         Response response;
         String responseBody = null;
@@ -52,7 +37,7 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
         MediaType mediaType = MediaType.parse("application/octet-stream");
         RequestBody body = RequestBody.create(mediaType, "{}");
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/discover/movie?page=1&include_video=false&include_adult=false&sort_by=popularity.desc&language=en-US&api_key=" + TMDb_APi_KEY)
+                .url(TMDbURL)
                 .get()
                 .build();
         try {
@@ -69,7 +54,6 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
             Log.d("Results array: ", resultsArray.toString());
             for (int i = 0; i < resultsArray.length(); i++) {
                 movies.add(responseJSONObject.getJSONArray("results").getJSONObject(i));
-                //Log.d("Poster path: ", movies.get(i).getString("poster_path"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -85,9 +69,20 @@ class FetchMoviesTask extends AsyncTask <Void, Void, ArrayList<JSONObject>> {
     }
 
     @Override
-    protected ArrayList<JSONObject> doInBackground(Void... voids) {
-        setMoviesArrayList();
-        //movieCovers();
+    protected ArrayList<JSONObject> doInBackground(String... params) {
+        if (params.length == 0) {
+            Log.d("Null", " params");
+        }
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https").authority("api.themoviedb.org")
+                .appendPath("3").appendPath("movie")
+                .appendPath(params[0])
+                .appendQueryParameter(LANGUAGE_PARAM, "en-US")
+                .appendQueryParameter(API_KEY_PARAM, TMDb_APi_KEY)
+                .appendQueryParameter(PAGE_PARAM, "1").build();
+        Log.d("Built URL", builder.toString());
+        setMoviesArrayList(builder.toString());
         return movies;
     }
 }
