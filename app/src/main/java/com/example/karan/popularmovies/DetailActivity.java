@@ -2,7 +2,7 @@ package com.example.karan.popularmovies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,8 +20,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
-        setSupportActionBar(toolbar);*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
+        setSupportActionBar(toolbar);
 
         TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
         TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
@@ -34,17 +34,18 @@ public class DetailActivity extends AppCompatActivity {
         if (bundle != null) {
             String movieTitle = bundle.getString("movie_title");
             movieTitleTV.setText(movieTitle);
+
             String movieURL = bundle.getString("movie_url");
             Picasso.with(DetailActivity.this).load(movieURL).into(posterIV);
+
             String movieOverview = bundle.getString("movie_overview");
             movieOverviewTV.setText(movieOverview);
+
             String movieRating = bundle.getString("movie_rating");
             ratingBar.setRating(Float.valueOf(movieRating));
+
             Date movieReleaseDate = (Date) bundle.get("movie_release_date");
             movieReleaseDateTV.setText(dateFormat.format(movieReleaseDate));
-            Log.d("Captured details", movieTitle + "\n" + movieURL + "\n" + movieOverview + "\n" + movieRating + "\n" + movieReleaseDate);
         }
-
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }

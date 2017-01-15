@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <group
-        android:id="@+id/sort_group"
-        android:enabled="true"
-        android:orderInCategory="2"
-        android:visible="true">
-        <item
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_sort_black_24dp"
+        android:title="Sort"
+        app:showAsAction="always">
+        <menu>
+            <item
             android:id="@+id/most_popular"
             android:title="@string/menu_sort_most_popular" />
-        <item
-            android:id="@+id/highest_rated"
-            android:title="@string/menu_sort_highest_rated" />
-    </group>
+            <item
+                android:id="@+id/highest_rated"
+                android:title="@string/menu_sort_highest_rated" />
+        </menu>
+
+    </item>
 
 </menu>

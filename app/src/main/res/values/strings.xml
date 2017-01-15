@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+
+    <string name="activity_discover_connect_to_internet">Please connect tot the internet</string>
+
     <string name="activity_detail_name">Details</string>
     <string name="activity_detail_release_date_placeholder">Release Date:</string>
     <string name="activity_detail_synopsis_placeholder">Synopsis:</string>
@@ -9,7 +12,6 @@
 
     <string name="pref_sorting_popular_key">most_popular</string>
     <string name="pref_sorting_popular_default_value">popular</string>
-
     <string name="pref_sorting_top_rated_key">top_rated</string>
     <string name="perf_sorting_top_rated_value">top_rated</string>
 

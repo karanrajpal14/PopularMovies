@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -32,8 +31,6 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     DiscoverMovieAdapter movieAdapter = new DiscoverMovieAdapter(getBaseContext(), new ArrayList<Movie>(), new OnPosterClickListener() {
         @Override
         public void onPosterClick(Movie movie) {
-            Toast.makeText(getApplicationContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
-            Log.d("Movie Title onClick", movie.getTitle());
         }
     });
 
@@ -60,9 +57,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
 
             recyclerView.setAdapter(movieAdapter);
         } else
-            Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-
-        Log.d("Adapter Set", "test");
+            Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -85,7 +80,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 fetchMoviesTask.execute(sortingCriteria);
                 movieAdapter.clearData();
             } else
-                Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
         } else if (id == R.id.most_popular) {
             if (isOnline()) {
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -96,9 +91,8 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 fetchMoviesTask.execute(sortingCriteria);
                 movieAdapter.clearData();
             } else
-                Toast.makeText(getApplicationContext(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
         }
-        Log.d("Item id", String.valueOf(item.getTitle()));
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,6 +110,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 e.printStackTrace();
             }
         }
+
         movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
             @Override
             public void onPosterClick(Movie movie) {
@@ -128,7 +123,6 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 detailsIntent.putExtra("movie_release_date", movie.getReleaseDate());
                 detailsIntent.setType("text/plain");
                 startActivity(detailsIntent);
-                Log.d("Movie Title onClick", movie.getTitle());
             }
         });
         recyclerView.setAdapter(movieAdapter);

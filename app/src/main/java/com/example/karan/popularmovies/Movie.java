@@ -1,8 +1,6 @@
 package com.example.karan.popularmovies;
 
 
-import android.util.Log;
-
 import java.util.Date;
 
 public class Movie {
@@ -20,7 +18,6 @@ public class Movie {
     }
 
     public Movie(String movieID, String movieTitle, String moviePosterURL, Date releaseDate, String rating, String overview) {
-        Log.d("Captured details", movieTitle + "\n" + moviePosterURL + "\n" + overview + "\n" + rating + "\n" + releaseDate);
         this.movieID = movieID;
         this.title = movieTitle;
         this.moviePosterURL = moviePosterURL;

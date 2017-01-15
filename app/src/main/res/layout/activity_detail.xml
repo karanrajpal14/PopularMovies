@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_discover"
+        android:id="@+id/toolbar_detail"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -18,7 +18,7 @@
         android:id="@+id/image_view_poster_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_discover"
+        android:layout_below="@id/toolbar_detail"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="20dp"
@@ -28,7 +28,7 @@
         android:id="@+id/text_view_movie_title_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_discover"
+        android:layout_below="@id/toolbar_detail"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
@@ -76,6 +76,6 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>
