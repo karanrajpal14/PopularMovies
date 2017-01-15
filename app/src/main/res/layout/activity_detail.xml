@@ -1,45 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_detail"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.karan.popularmovies.DetailActivity">
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_discover"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/activity_detail_name" />
 
     <ImageView
         android:id="@+id/image_view_poster_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:adjustViewBounds="true" />
+        android:layout_below="@id/toolbar_discover"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/text_view_movie_title_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp" />
+        android:layout_below="@id/toolbar_discover"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+        android:textSize="25sp" />
 
     <RatingBar
         android:id="@+id/rating_bar_detail_activity"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_view_movie_title_detail_activity"
+        android:layout_marginBottom="16dp"
+        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+        android:numStars="10" />
+
+    <TextView
+        android:id="@+id/text_view_release_date_placeholder_detail_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rating_bar_detail_activity"
+        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+        android:text="@string/activity_detail_release_date_placeholder" />
 
     <TextView
         android:id="@+id/text_view_release_date_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp" />
+        android:layout_below="@id/text_view_release_date_placeholder_detail_activity"
+        android:layout_toRightOf="@id/image_view_poster_detail_activity" />
+
+    <TextView
+        android:id="@+id/text_view_synopsis_placeholder_detail_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image_view_poster_detail_activity"
+        android:layout_marginLeft="16dp"
+        android:text="@string/activity_detail_synopsis_placeholder" />
 
     <TextView
         android:id="@+id/text_view_movie_overview_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp" />
+        android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="25sp" />
 
-</LinearLayout>
+</RelativeLayout>

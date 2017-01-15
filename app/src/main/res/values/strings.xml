@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="activity_detail_name">Details</string>
+    <string name="activity_detail_release_date_placeholder">Release Date:</string>
+    <string name="activity_detail_synopsis_placeholder">Synopsis:</string>
 
     <string name="menu_sort_most_popular">Most Popular</string>
     <string name="menu_sort_highest_rated">Highest Rated</string>

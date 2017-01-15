@@ -29,7 +29,6 @@ public class DetailActivity extends AppCompatActivity {
         ImageView posterIV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMM yyyy", Locale.getDefault());
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
-        ratingBar.setNumStars(10);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -38,11 +37,11 @@ public class DetailActivity extends AppCompatActivity {
             String movieURL = bundle.getString("movie_url");
             Picasso.with(DetailActivity.this).load(movieURL).into(posterIV);
             String movieOverview = bundle.getString("movie_overview");
-            movieOverviewTV.setText("Synopsis: \n" + movieOverview);
+            movieOverviewTV.setText(movieOverview);
             String movieRating = bundle.getString("movie_rating");
             ratingBar.setRating(Float.valueOf(movieRating));
             Date movieReleaseDate = (Date) bundle.get("movie_release_date");
-            movieReleaseDateTV.setText("Release date: " + dateFormat.format(movieReleaseDate));
+            movieReleaseDateTV.setText(dateFormat.format(movieReleaseDate));
             Log.d("Captured details", movieTitle + "\n" + movieURL + "\n" + movieOverview + "\n" + movieRating + "\n" + movieReleaseDate);
         }
 
