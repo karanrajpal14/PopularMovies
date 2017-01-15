@@ -49,7 +49,7 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView movieName;
         ImageView moviePoster;
 
@@ -57,17 +57,19 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
             super(itemView);
             movieName = (TextView) itemView.findViewById(R.id.text_view_movie_name);
             moviePoster = (ImageView) itemView.findViewById(R.id.image_view_poster);
+            itemView.setOnClickListener(this);
+            moviePoster.setOnClickListener(this);
+            movieName.setOnClickListener(this);
         }
 
         public void bind(final Movie movie, final OnPosterClickListener onPosterClickListener) {
             movieName.setText(movie.getTitle());
             Picasso.with(context).load(movie.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height).into(moviePoster);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onPosterClickListener.onPosterClick(movie);
-                }
-            });
+        }
+
+        @Override
+        public void onClick(View v) {
+            onPosterClickListener.onPosterClick(movieArrayList.get(getAdapterPosition()));
         }
     }
 }

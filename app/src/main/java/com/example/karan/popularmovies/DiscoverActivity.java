@@ -114,7 +114,6 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
             @Override
             public void onPosterClick(Movie movie) {
-                Toast.makeText(getApplicationContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
                 Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
                 detailsIntent.putExtra("movie_title", movie.getTitle());
                 detailsIntent.putExtra("movie_url", movie.getMoviePosterURL());
