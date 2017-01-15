@@ -26,9 +26,6 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(movieArrayList.get(position), onPosterClickListener);
-        /*Movie m = movieArrayList.get(position);
-        holder.movieName.setText(m.getTitle());
-        Picasso.with(context).load(m.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width,R.dimen.activity_discover_poster_height).into(holder.moviePoster);*/
     }
 
     @Override

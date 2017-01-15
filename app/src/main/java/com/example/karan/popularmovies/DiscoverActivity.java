@@ -1,6 +1,7 @@
 package com.example.karan.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -102,12 +103,11 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     }
 
     @Override
-    public void onFetchFinish(ArrayList<JSONObject> movies) {
+    public void onFetchFinish(final ArrayList<JSONObject> movies) {
         Movie m;
         String base_url = "http://image.tmdb.org/t/p/w342/";
-        //TODO: Remove base URL from here and use it separately while inflating the view or resize the cached poster as thumbnail for detail activity
-        SimpleDateFormat inputDateFormat = new SimpleDateFormat("YYYY-MM-dd", Locale.getDefault());
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd, MMM YYYY", Locale.getDefault());
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
         for (int i = 1; i < movies.size(); i++) {
             try {
                 m = new Movie(movies.get(i).getString("id"), movies.get(i).getString("title"), base_url + movies.get(i).getString("poster_path"), inputDateFormat.parse(movies.get(i).getString("release_date")), movies.get(i).getString("vote_average"), movies.get(i).getString("overview"));
@@ -120,6 +120,14 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
             @Override
             public void onPosterClick(Movie movie) {
                 Toast.makeText(getApplicationContext(), movie.getTitle(), Toast.LENGTH_LONG).show();
+                Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
+                detailsIntent.putExtra("movie_title", movie.getTitle());
+                detailsIntent.putExtra("movie_url", movie.getMoviePosterURL());
+                detailsIntent.putExtra("movie_overview", movie.getOverview());
+                detailsIntent.putExtra("movie_rating", movie.getRating());
+                detailsIntent.putExtra("movie_release_date", movie.getReleaseDate());
+                detailsIntent.setType("text/plain");
+                startActivity(detailsIntent);
                 Log.d("Movie Title onClick", movie.getTitle());
             }
         });
