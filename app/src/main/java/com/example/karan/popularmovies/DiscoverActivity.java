@@ -28,11 +28,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     ArrayList<Movie> movieArrayList = new ArrayList<>();
     FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
     RecyclerView recyclerView;
-    DiscoverMovieAdapter movieAdapter = new DiscoverMovieAdapter(getBaseContext(), new ArrayList<Movie>(), new OnPosterClickListener() {
-        @Override
-        public void onPosterClick(Movie movie) {
-        }
-    });
+    DiscoverMovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +50,20 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
             recyclerView.setLayoutManager(layoutManager);
+
+            movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
+                @Override
+                public void onPosterClick(Movie movie) {
+                    Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
+                    detailsIntent.putExtra("movie_title", movie.getTitle());
+                    detailsIntent.putExtra("movie_url", movie.getMoviePosterURL());
+                    detailsIntent.putExtra("movie_overview", movie.getOverview());
+                    detailsIntent.putExtra("movie_rating", movie.getRating());
+                    detailsIntent.putExtra("movie_release_date", movie.getReleaseDate());
+                    detailsIntent.setType("text/plain");
+                    startActivity(detailsIntent);
+                }
+            });
 
             recyclerView.setAdapter(movieAdapter);
         } else
@@ -111,20 +121,8 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
             }
         }
 
-        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
-            @Override
-            public void onPosterClick(Movie movie) {
-                Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                detailsIntent.putExtra("movie_title", movie.getTitle());
-                detailsIntent.putExtra("movie_url", movie.getMoviePosterURL());
-                detailsIntent.putExtra("movie_overview", movie.getOverview());
-                detailsIntent.putExtra("movie_rating", movie.getRating());
-                detailsIntent.putExtra("movie_release_date", movie.getReleaseDate());
-                detailsIntent.setType("text/plain");
-                startActivity(detailsIntent);
-            }
-        });
-        recyclerView.setAdapter(movieAdapter);
+        movieAdapter.setMovies(movieArrayList);
+        movieAdapter.notifyDataSetChanged();
     }
 
     public boolean isOnline() {
