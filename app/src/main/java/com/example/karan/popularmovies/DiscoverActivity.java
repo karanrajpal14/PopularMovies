@@ -55,12 +55,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 @Override
                 public void onPosterClick(Movie movie) {
                     Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                    detailsIntent.putExtra("movie_title", movie.getTitle());
-                    detailsIntent.putExtra("movie_url", movie.getMoviePosterURL());
-                    detailsIntent.putExtra("movie_overview", movie.getOverview());
-                    detailsIntent.putExtra("movie_rating", movie.getRating());
-                    detailsIntent.putExtra("movie_release_date", movie.getReleaseDate());
-                    detailsIntent.setType("text/plain");
+                    detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
                     startActivity(detailsIntent);
                 }
             });

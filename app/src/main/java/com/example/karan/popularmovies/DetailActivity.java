@@ -15,6 +15,8 @@ import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
 
+    static final String parcelableMovieKey = Movie.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,25 +28,26 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
         TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
         TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
-        ImageView posterIV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
+        ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMM yyyy", Locale.getDefault());
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            String movieTitle = bundle.getString("movie_title");
+        Movie selectedMovie = this.getIntent().getParcelableExtra(parcelableMovieKey);
+
+        if (selectedMovie != null) {
+            String movieTitle = selectedMovie.getTitle();
             movieTitleTV.setText(movieTitle);
 
-            String movieURL = bundle.getString("movie_url");
-            Picasso.with(DetailActivity.this).load(movieURL).into(posterIV);
+            String movieURL = selectedMovie.getMoviePosterURL();
+            Picasso.with(DetailActivity.this).load(movieURL).into(posterTV);
 
-            String movieOverview = bundle.getString("movie_overview");
+            String movieOverview = selectedMovie.getOverview();
             movieOverviewTV.setText(movieOverview);
 
-            String movieRating = bundle.getString("movie_rating");
+            String movieRating = selectedMovie.getRating();
             ratingBar.setRating(Float.valueOf(movieRating));
 
-            Date movieReleaseDate = (Date) bundle.get("movie_release_date");
+            Date movieReleaseDate = selectedMovie.getReleaseDate();
             movieReleaseDateTV.setText(dateFormat.format(movieReleaseDate));
         }
     }
