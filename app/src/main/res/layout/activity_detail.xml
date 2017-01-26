@@ -14,68 +14,77 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="@string/activity_detail_name" />
 
-    <ImageView
-        android:id="@+id/image_view_poster_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_detail"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/text_view_movie_title_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_detail"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/image_view_poster_detail_activity"
-        android:textSize="25sp" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:paddingBottom="16dp"
+            android:paddingTop="?attr/actionBarSize">
 
-    <RatingBar
-        android:id="@+id/rating_bar_detail_activity"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_movie_title_detail_activity"
-        android:layout_marginBottom="16dp"
-        android:layout_toRightOf="@id/image_view_poster_detail_activity"
-        android:numStars="10" />
+            <ImageView
+                android:id="@+id/image_view_poster_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp" />
 
-    <TextView
-        android:id="@+id/text_view_release_date_placeholder_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rating_bar_detail_activity"
-        android:layout_toRightOf="@id/image_view_poster_detail_activity"
-        android:text="@string/activity_detail_release_date_placeholder" />
+            <TextView
+                android:id="@+id/text_view_movie_title_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/text_view_release_date_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_release_date_placeholder_detail_activity"
-        android:layout_toRightOf="@id/image_view_poster_detail_activity" />
+            <RatingBar
+                android:id="@+id/rating_bar_detail_activity"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_movie_title_detail_activity"
+                android:layout_marginBottom="16dp"
+                android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                android:numStars="10" />
 
-    <TextView
-        android:id="@+id/text_view_synopsis_placeholder_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/image_view_poster_detail_activity"
-        android:layout_marginLeft="16dp"
-        android:text="@string/activity_detail_synopsis_placeholder" />
+            <TextView
+                android:id="@+id/text_view_release_date_placeholder_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rating_bar_detail_activity"
+                android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                android:text="@string/activity_detail_release_date_placeholder" />
 
-    <TextView
-        android:id="@+id/text_view_movie_overview_detail_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/text_view_release_date_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_release_date_placeholder_detail_activity"
+                android:layout_toRightOf="@id/image_view_poster_detail_activity" />
+
+            <TextView
+                android:id="@+id/text_view_synopsis_placeholder_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image_view_poster_detail_activity"
+                android:text="@string/activity_detail_synopsis_placeholder" />
+
+            <TextView
+                android:id="@+id/text_view_movie_overview_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
