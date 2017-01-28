@@ -68,7 +68,7 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
 
         public void bind(final Movie movie, final OnPosterClickListener onPosterClickListener) {
             movieName.setText(movie.getTitle());
-            Picasso.with(context).load(movie.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height).into(moviePoster);
+            Picasso.with(context).load(movie.getMoviePosterURL()).resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height).error(R.drawable.placeholder_error_downloading_poster).placeholder(R.drawable.placeholder_downloading_poster).into(moviePoster);
         }
 
         @Override

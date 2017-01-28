@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
             movieTitleTV.setText(movieTitle);
 
             String movieURL = selectedMovie.getMoviePosterURL();
-            Picasso.with(DetailActivity.this).load(movieURL).into(posterTV);
+            Picasso.with(DetailActivity.this).load(movieURL).error(R.drawable.placeholder_error_downloading_poster).placeholder(R.drawable.placeholder_downloading_poster).into(posterTV);
 
             String movieOverview = selectedMovie.getOverview();
             movieOverviewTV.setText(movieOverview);
