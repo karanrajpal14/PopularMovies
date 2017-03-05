@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,13 +28,14 @@ import java.util.Locale;
 public class DiscoverActivity extends AppCompatActivity implements FetchMovieDetailsResponse {
 
     ArrayList<Movie> movieArrayList = new ArrayList<>();
-    FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+    FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
     RecyclerView recyclerView;
     DiscoverMovieAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Stetho.initializeWithDefaults(this);
         setContentView(R.layout.activity_discover);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_discover);
@@ -80,7 +83,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_top_rated_key), getString(R.string.perf_sorting_top_rated_value));
 
-                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
                 fetchMoviesTask.delegate = this;
                 fetchMoviesTask.execute(sortingCriteria);
                 movieAdapter.clearData();
@@ -91,7 +94,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
 
-                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask();
+                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
                 fetchMoviesTask.delegate = this;
                 fetchMoviesTask.execute(sortingCriteria);
                 movieAdapter.clearData();

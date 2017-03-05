@@ -27,6 +27,12 @@
                 android:name="android.support.DiscoverActivity"
                 android:value="com.example.karan.popularmovies.DiscoverActivity" />
         </activity>
+
+        <provider
+            android:name=".data.MovieProvider"
+            android:authorities="com.example.karan.popularmovies"
+            android:enabled="true"
+            android:grantUriPermissions="true" />
     </application>
 
 </manifest>
