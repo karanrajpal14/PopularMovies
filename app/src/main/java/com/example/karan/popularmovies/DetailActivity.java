@@ -47,8 +47,9 @@ public class DetailActivity extends AppCompatActivity {
             String movieRating = selectedMovie.getRating();
             ratingBar.setRating(Float.valueOf(movieRating));
 
-            Date movieReleaseDate = selectedMovie.getReleaseDate();
-            movieReleaseDateTV.setText(dateFormat.format(movieReleaseDate));
+            String movieReleaseDate = selectedMovie.getReleaseDate();
+            Date date = new Date(movieReleaseDate);
+            movieReleaseDateTV.setText(dateFormat.format(date));
         }
     }
 }

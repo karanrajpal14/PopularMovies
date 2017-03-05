@@ -14,7 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +25,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
+class FetchMoviesTask extends AsyncTask<String, Void, String> {
 
     private static final String TMDb_API_KEY = BuildConfig.TMDb_API_KEY;
     private final String LANGUAGE_PARAM = "language";
@@ -36,9 +39,16 @@ class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
         this.context = context;
     }
 
+    private Cursor getMoviesCursor(String category) {
+        movieCursor = context.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(category).build(), null, null, null, null);
+        return null;
+    }
+
     private void addMoviesToDb(String TMDbMovieURL, String category) {
 
         Vector<ContentValues> movieValuesVector;
+        final String base_url = "http://image.tmdb.org/t/p/w342/";
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(30, TimeUnit.SECONDS);
@@ -75,8 +85,9 @@ class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
                 int movieID = (int) movieObject.get("id");
                 String movieTitle = (String) movieObject.get("title");
                 String synopsis = (String) movieObject.get("overview");
-                String releaseDate = (String) movieObject.get("release_date");
-                String posterPath = (String) movieObject.get("poster_path");
+
+                String releaseDate = inputDateFormat.parse((String) movieObject.get("release_date")).toString().substring(0, 10);
+                String posterPath = base_url + movieObject.get("poster_path");
                 String backdropPath = (String) movieObject.get("backdrop_path");
                 Double rating = Double.valueOf(movieObject.get("vote_average").toString()) / 2.0;
 
@@ -118,7 +129,7 @@ class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
                 trailersThread.join();
 
             }
-        } catch (JSONException | InterruptedException e) {
+        } catch (JSONException | InterruptedException | ParseException e) {
             e.printStackTrace();
         }
     }
@@ -255,14 +266,6 @@ class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
             reviewValuesVector.toArray(reviewValuesArray);
             context.getContentResolver().bulkInsert(MovieContract.ReviewEntry.CONTENT_URI, reviewValuesArray);
         }
-
-
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<JSONObject> movies) {
-        super.onPostExecute(movies);
-        delegate.onFetchFinish(movies);
     }
 
     private void buildMovieUriString(String category) {
@@ -304,11 +307,17 @@ class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<JSONObject>> {
     }
 
     @Override
-    protected ArrayList<JSONObject> doInBackground(String... params) {
+    protected String doInBackground(String... params) {
         if (params.length == 0) {
             return null;
         }
         buildMovieUriString(params[0]);
-        return movies;
+        return params[0];
+    }
+
+    @Override
+    protected void onPostExecute(String category) {
+        super.onPostExecute(category);
+        delegate.onFetchFinish(category);
     }
 }

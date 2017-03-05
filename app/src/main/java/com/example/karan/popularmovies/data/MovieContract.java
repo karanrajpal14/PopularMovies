@@ -60,7 +60,8 @@ public class MovieContract {
         }
 
         public static String getMovieCategoryOrIDFromUri(Uri movieUriWithCategory) {
-            String category = movieUriWithCategory.getPathSegments().get(2);
+            Log.d(TAG, "getMovieCategoryOrIDFromUri: " + movieUriWithCategory);
+            String category = movieUriWithCategory.getPathSegments().get(1);
             Log.d(TAG, "getMovieCategoryOrIDFromUri: " + category);
             return category;
         }

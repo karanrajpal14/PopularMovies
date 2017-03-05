@@ -4,8 +4,6 @@ package com.example.karan.popularmovies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 public class Movie implements Parcelable {
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
         @Override
@@ -22,7 +20,7 @@ public class Movie implements Parcelable {
     private String title;
     private String overview;
     private String moviePosterURL;
-    private Date releaseDate;
+    private String releaseDate;
     private String rating;
 
     public Movie(String movieTitle, String moviePosterURL) {
@@ -31,7 +29,7 @@ public class Movie implements Parcelable {
         this.moviePosterURL = moviePosterURL;
     }
 
-    public Movie(String movieID, String movieTitle, String moviePosterURL, Date releaseDate, String rating, String overview) {
+    public Movie(String movieID, String movieTitle, String moviePosterURL, String releaseDate, String rating, String overview) {
         this.movieID = movieID;
         this.title = movieTitle;
         this.moviePosterURL = moviePosterURL;
@@ -48,8 +46,7 @@ public class Movie implements Parcelable {
         this.title = in.readString();
         this.overview = in.readString();
         this.moviePosterURL = in.readString();
-        long tmpReleaseDate = in.readLong();
-        this.releaseDate = tmpReleaseDate == -1 ? null : new Date(tmpReleaseDate);
+        this.releaseDate = in.readString();
         this.rating = in.readString();
     }
 
@@ -64,7 +61,7 @@ public class Movie implements Parcelable {
         dest.writeString(this.title);
         dest.writeString(this.overview);
         dest.writeString(this.moviePosterURL);
-        dest.writeLong(this.releaseDate != null ? this.releaseDate.getTime() : -1);
+        dest.writeString(this.releaseDate);
         dest.writeString(this.rating);
     }
 
@@ -76,11 +73,11 @@ public class Movie implements Parcelable {
         this.movieID = movieID;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 

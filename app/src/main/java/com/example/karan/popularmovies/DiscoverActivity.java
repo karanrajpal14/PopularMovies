@@ -3,6 +3,7 @@ package com.example.karan.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,19 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.karan.popularmovies.data.MovieContract;
 import com.facebook.stetho.Stetho;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class DiscoverActivity extends AppCompatActivity implements FetchMovieDetailsResponse {
 
@@ -105,6 +102,45 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
     }
 
     @Override
+    public void onFetchFinish(final String category) {
+
+        Cursor movies = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(category).build(), null, null, null, null);
+        final int COLUMN_MOVIE_ID = 0;
+        final int COLUMN_TITLE = 1;
+        final int COLUMN_SYNOPSIS = 2;
+        final int COLUMN_RELEASE_DATE = 3;
+        final int COLUMN_POSTER_PATH = 4;
+        final int COLUMN_BACKDROP_PATH = 5;
+        final int COLUMN_RATING = 6;
+        final int COLUMN_TRAILER = 7;
+        final int COLUMN_REVIEWS = 8;
+        final int COLUMN_CATEGORY = 9;
+
+        //assert moviess != null;
+        while (movies.moveToNext()) {
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getInt(COLUMN_MOVIE_ID));
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_TITLE));
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_SYNOPSIS));
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_RELEASE_DATE));
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_POSTER_PATH));
+            Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_RATING));
+
+            Movie m = new Movie(
+                    movies.getString(COLUMN_MOVIE_ID),
+                    movies.getString(COLUMN_TITLE),
+                    movies.getString(COLUMN_POSTER_PATH),
+                    movies.getString(COLUMN_RELEASE_DATE),
+                    movies.getString(COLUMN_RATING),
+                    movies.getString(COLUMN_SYNOPSIS)
+            );
+            movieArrayList.add(m);
+        }
+
+        movieAdapter.setMovies(movieArrayList);
+        movieAdapter.notifyDataSetChanged();
+    }
+
+    /*@Override
     public void onFetchFinish(final ArrayList<JSONObject> movies) {
         Movie m;
         String base_url = "http://image.tmdb.org/t/p/w342/";
@@ -121,7 +157,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
 
         movieAdapter.setMovies(movieArrayList);
         movieAdapter.notifyDataSetChanged();
-    }
+    }*/
 
     public boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
