@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.karan.popularmovies.data.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -38,13 +39,13 @@ public class DetailActivity extends AppCompatActivity {
             String movieTitle = selectedMovie.getTitle();
             movieTitleTV.setText(movieTitle);
 
-            String movieURL = selectedMovie.getMoviePosterURL();
+            String movieURL = selectedMovie.getPosterPath();
             Picasso.with(DetailActivity.this).load(movieURL).error(R.drawable.placeholder_error_downloading_poster).placeholder(R.drawable.placeholder_downloading_poster).into(posterTV);
 
             String movieOverview = selectedMovie.getOverview();
             movieOverviewTV.setText(movieOverview);
 
-            String movieRating = selectedMovie.getRating();
+            String movieRating = String.valueOf(selectedMovie.getVoteAverage());
             ratingBar.setRating(Float.valueOf(movieRating));
 
             String movieReleaseDate = selectedMovie.getReleaseDate();
