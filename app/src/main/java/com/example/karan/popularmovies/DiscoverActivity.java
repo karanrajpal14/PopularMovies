@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,27 +17,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.karan.popularmovies.data.ApiService;
+import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
 import com.example.karan.popularmovies.data.MovieContract;
 import com.example.karan.popularmovies.data.MovieJSONResponse;
+import com.example.karan.popularmovies.data.RetroClient;
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.karan.popularmovies.BuildConfig.TMDb_API_KEY;
 
 public class DiscoverActivity extends AppCompatActivity implements FetchMovieDetailsResponse {
 
-    ArrayList<Movie> movieArrayList = new ArrayList<>();
-    //FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
+    List<Movie> movies = new ArrayList<>();
     RecyclerView recyclerView;
     DiscoverMovieAdapter movieAdapter;
 
@@ -51,12 +48,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_discover);
         setSupportActionBar(toolbar);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
-
         if (isOnline()) {
-            /*fetchMoviesTask.delegate = this;
-            fetchMoviesTask.execute(sortingCriteria);*/
 
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view_discover);
             recyclerView.setHasFixedSize(true);
@@ -65,61 +57,48 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
             recyclerView.setLayoutManager(layoutManager);
             loadJSON();
 
-            /*movieAdapter = new DiscoverMovieAdapter(getBaseContext(), this.movieArrayList, new OnPosterClickListener() {
-                @Override
-                public void onPosterClick(Movie movie) {
-                    Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                    detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
-                    startActivity(detailsIntent);
-                }
-            });
-
-            recyclerView.setAdapter(movieAdapter);*/
         } else
             Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
     }
 
-    private void loadJSON() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.themoviedb.org/3/movie/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ApiService apiService = retrofit.create(ApiService.class);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
-        Uri.Builder builder = new Uri.Builder();
-        String PAGE_PARAM = "page";
-        final String LANGUAGE_PARAM = "language";
-        final String API_KEY_PARAM = "api_key";
-        builder.appendPath(sortingCriteria)
-                .appendQueryParameter(LANGUAGE_PARAM, "en-US")
-                .appendQueryParameter(API_KEY_PARAM, TMDb_API_KEY)
-                .appendQueryParameter(PAGE_PARAM, "1").build();
-        Call<MovieJSONResponse> call = apiService.getJSON(builder.toString());
+    private void loadJSON(String... sortingParam) {
+
+        final String LANGUAGE = "en-US";
+        String sortingCriteria;
+        if (sortingParam.length == 0) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
+        } else {
+            sortingCriteria = sortingParam[0];
+        }
+
+        ApiInterface apiService = RetroClient.getClient().create(ApiInterface.class);
+
+        Call<MovieJSONResponse> call = apiService.getCategorizedMovies(sortingCriteria, TMDb_API_KEY, LANGUAGE);
 
         call.enqueue(new Callback<MovieJSONResponse>() {
-            @Override
-            public void onResponse(Call<MovieJSONResponse> call, Response<MovieJSONResponse> response) {
-                MovieJSONResponse movieJSONResponse = response.body();
-                movieArrayList = new ArrayList<>(Arrays.asList(movieJSONResponse.getMovies()));
-                movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movieArrayList, new OnPosterClickListener() {
-                    @Override
-                    public void onPosterClick(Movie movie) {
-                        Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                        detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
-                        startActivity(detailsIntent);
-                    }
-                });
+                         @Override
+                         public void onResponse(Call<MovieJSONResponse> call, Response<MovieJSONResponse> response) {
+                             List<Movie> movies = response.body().getResults();
+                             movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movies, new OnPosterClickListener() {
+                                 @Override
+                                 public void onPosterClick(Movie movie) {
+                                     Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
+                                     detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
+                                     startActivity(detailsIntent);
+                                 }
+                             });
+                             recyclerView.setAdapter(movieAdapter);
+                             Log.d("Response Received", "onResponse: No of movies received" + movies.size());
+                         }
 
-                recyclerView.setAdapter(movieAdapter);
-            }
+                         @Override
+                         public void onFailure(Call<MovieJSONResponse> call, Throwable t) {
+                             Log.d("Failure", "onFailure: " + t.toString());
+                         }
+                     }
 
-            @Override
-            public void onFailure(Call<MovieJSONResponse> call, Throwable t) {
-                Log.d("RetroFit Messed Up", "onFailure: " + t.getMessage());
-
-            }
-        });
+        );
     }
 
     @Override
@@ -134,24 +113,14 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
 
         if (id == R.id.highest_rated) {
             if (isOnline()) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_top_rated_key), getString(R.string.perf_sorting_top_rated_value));
-
-                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
-                fetchMoviesTask.delegate = this;
-                fetchMoviesTask.execute(sortingCriteria);
-                movieAdapter.clearData();
+                loadJSON(getString(R.string.pref_sorting_top_rated_key));
+                movieAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
         } else if (id == R.id.most_popular) {
             if (isOnline()) {
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
-
-                FetchMoviesTask fetchMoviesTask = new FetchMoviesTask(this);
-                fetchMoviesTask.delegate = this;
-                fetchMoviesTask.execute(sortingCriteria);
-                movieAdapter.clearData();
+                loadJSON(getString(R.string.pref_sorting_popular_key));
+                movieAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
         }
@@ -190,10 +159,10 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                     movies.getString(COLUMN_RATING),
                     movies.getString(COLUMN_SYNOPSIS)
             );*/
-            //movieArrayList.add(m);
+            //movies.add(m);
         }
 
-        movieAdapter.setMovies(movieArrayList);
+        movieAdapter.setMovies(this.movies);
         movieAdapter.notifyDataSetChanged();
     }
 
@@ -206,13 +175,13 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         for (int i = 1; i < movies.size(); i++) {
             try {
                 m = new Movie(movies.get(i).getString("id"), movies.get(i).getString("title"), base_url + movies.get(i).getString("poster_path"), inputDateFormat.parse(movies.get(i).getString("release_date")), movies.get(i).getString("vote_average"), movies.get(i).getString("overview"));
-                movieArrayList.add(m);
+                movies.add(m);
             } catch (JSONException | ParseException e) {
                 e.printStackTrace();
             }
         }
 
-        movieAdapter.setMovies(movieArrayList);
+        movieAdapter.setMovies(movies);
         movieAdapter.notifyDataSetChanged();
     }*/
 

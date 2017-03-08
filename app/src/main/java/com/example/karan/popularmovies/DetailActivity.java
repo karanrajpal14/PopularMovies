@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.karan.popularmovies.data.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -30,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
         TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
         ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd, MMM yyyy", Locale.getDefault());
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
 
         Movie selectedMovie = this.getIntent().getParcelableExtra(parcelableMovieKey);
@@ -49,8 +49,14 @@ public class DetailActivity extends AppCompatActivity {
             ratingBar.setRating(Float.valueOf(movieRating));
 
             String movieReleaseDate = selectedMovie.getReleaseDate();
-            Date date = new Date(movieReleaseDate);
-            movieReleaseDateTV.setText(dateFormat.format(date));
+            String formattedDate = null;
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(movieReleaseDate);
+                formattedDate = new SimpleDateFormat("dd, MMM yyyy", Locale.getDefault()).format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            movieReleaseDateTV.setText(formattedDate);
         }
     }
 }
