@@ -1,3 +1,4 @@
+/*
 package com.example.karan.popularmovies;
 
 import android.content.ContentValues;
@@ -321,3 +322,4 @@ class FetchMoviesTask extends AsyncTask<String, Void, String> {
         delegate.onFetchFinish(category);
     }
 }
+*/

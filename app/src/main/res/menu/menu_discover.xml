@@ -7,7 +7,7 @@
         app:showAsAction="always">
         <menu>
             <item
-            android:id="@+id/most_popular"
+                android:id="@+id/most_popular"
             android:title="@string/menu_sort_most_popular" />
             <item
                 android:id="@+id/highest_rated"

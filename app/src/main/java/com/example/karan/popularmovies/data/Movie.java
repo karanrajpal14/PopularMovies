@@ -32,6 +32,7 @@ public class Movie implements Parcelable {
         }
 
     };
+
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
@@ -58,26 +59,6 @@ public class Movie implements Parcelable {
      * No args constructor for use in serialization
      */
     public Movie() {
-    }
-
-    /**
-     * @param id
-     * @param title
-     * @param overview
-     * @param releaseDate
-     * @param posterPath
-     * @param backdropPath
-     * @param voteAverage
-     */
-    public Movie(Integer id, String title, String overview, String releaseDate, String posterPath, String backdropPath, Double voteAverage) {
-        super();
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-        this.id = id;
-        this.title = title;
-        this.backdropPath = backdropPath;
-        this.voteAverage = voteAverage;
     }
 
     public String getPosterPath() {
@@ -159,7 +140,7 @@ public class Movie implements Parcelable {
     }
 
     public Double getVoteAverage() {
-        return voteAverage;
+        return voteAverage / 2.0;
     }
 
     public void setVoteAverage(Double voteAverage) {

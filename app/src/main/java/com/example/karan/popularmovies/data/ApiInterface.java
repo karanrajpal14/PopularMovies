@@ -11,4 +11,10 @@ public interface ApiInterface {
 
     @GET("movie/{id}")
     Call<MovieJSONResponse> getMovie(@Path("id") int id, @Query("api_key") String TMDb_API_KEY, @Query("language") String language);
+
+    @GET("movie/{id}/reviews")
+    Call<ReviewsJSONResponse> getReviews(@Path("id") int id, @Query("api_key") String TMDb_API_KEY, @Query("language") String language);
+
+    @GET("movie/{id}/videos")
+    Call<TrailersJSONResponse> getTrailers(@Path("id") int id, @Query("api_key") String TMDb_API_KEY, @Query("language") String language);
 }

@@ -3,7 +3,6 @@ package com.example.karan.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
-import com.example.karan.popularmovies.data.MovieContract;
 import com.example.karan.popularmovies.data.MovieJSONResponse;
 import com.example.karan.popularmovies.data.RetroClient;
 import com.facebook.stetho.Stetho;
@@ -33,7 +31,7 @@ import retrofit2.Response;
 
 import static com.example.karan.popularmovies.BuildConfig.TMDb_API_KEY;
 
-public class DiscoverActivity extends AppCompatActivity implements FetchMovieDetailsResponse {
+public class DiscoverActivity extends AppCompatActivity {
 
     List<Movie> movies = new ArrayList<>();
     RecyclerView recyclerView;
@@ -67,7 +65,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         String sortingCriteria;
         if (sortingParam.length == 0) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_key), getString(R.string.pref_sorting_popular_default_value));
+            sortingCriteria = sharedPreferences.getString(getString(R.string.pref_sorting_popular_default_value), getString(R.string.pref_sorting_popular_default_value));
         } else {
             sortingCriteria = sortingParam[0];
         }
@@ -79,7 +77,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         call.enqueue(new Callback<MovieJSONResponse>() {
                          @Override
                          public void onResponse(Call<MovieJSONResponse> call, Response<MovieJSONResponse> response) {
-                             List<Movie> movies = response.body().getResults();
+                             movies = response.body().getResults();
                              movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movies, new OnPosterClickListener() {
                                  @Override
                                  public void onPosterClick(Movie movie) {
@@ -97,7 +95,6 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                              Log.d("Failure", "onFailure: " + t.toString());
                          }
                      }
-
         );
     }
 
@@ -119,7 +116,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
                 Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
         } else if (id == R.id.most_popular) {
             if (isOnline()) {
-                loadJSON(getString(R.string.pref_sorting_popular_key));
+                loadJSON(getString(R.string.pref_sorting_popular_default_value));
                 movieAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
@@ -127,7 +124,7 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public void onFetchFinish(final String category) {
 
         Cursor movies = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(category).build(), null, null, null, null);
@@ -151,20 +148,20 @@ public class DiscoverActivity extends AppCompatActivity implements FetchMovieDet
             Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_POSTER_PATH));
             Log.d("Cursor Test", "onFetchFinish: " + movies.getString(COLUMN_RATING));
 
-            /*Movie m = new Movie(
+            *//*Movie m = new Movie(
                     movies.getString(COLUMN_MOVIE_ID),
                     movies.getString(COLUMN_TITLE),
                     movies.getString(COLUMN_POSTER_PATH),
                     movies.getString(COLUMN_RELEASE_DATE),
                     movies.getString(COLUMN_RATING),
                     movies.getString(COLUMN_SYNOPSIS)
-            );*/
+            );*//*
             //movies.add(m);
         }
 
         movieAdapter.setMovies(this.movies);
         movieAdapter.notifyDataSetChanged();
-    }
+    }*/
 
     /*@Override
     public void onFetchFinish(final ArrayList<JSONObject> movies) {

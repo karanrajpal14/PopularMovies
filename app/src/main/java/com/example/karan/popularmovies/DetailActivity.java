@@ -3,21 +3,74 @@ package com.example.karan.popularmovies;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
+import com.example.karan.popularmovies.data.RetroClient;
+import com.example.karan.popularmovies.data.Reviews;
+import com.example.karan.popularmovies.data.ReviewsJSONResponse;
+import com.example.karan.popularmovies.data.Trailers;
+import com.example.karan.popularmovies.data.TrailersJSONResponse;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.karan.popularmovies.BuildConfig.TMDb_API_KEY;
 
 public class DetailActivity extends AppCompatActivity {
 
     static final String parcelableMovieKey = Movie.class.getSimpleName();
+    final String LANGUAGE = "en-US";
+
+    List<Reviews> reviews;
+    List<Trailers> trailers;
+
+    public void fetchReviews(int movieID) {
+        Log.d("DetailsActivity", "fetchReviews: Movie ID: " + movieID);
+        ApiInterface apiInterface = RetroClient.getClient().create(ApiInterface.class);
+        Call<ReviewsJSONResponse> call = apiInterface.getReviews(movieID, TMDb_API_KEY, LANGUAGE);
+        call.enqueue(new Callback<ReviewsJSONResponse>() {
+            @Override
+            public void onResponse(Call<ReviewsJSONResponse> call, Response<ReviewsJSONResponse> response) {
+                reviews = response.body().getResults();
+            }
+
+            @Override
+            public void onFailure(Call<ReviewsJSONResponse> call, Throwable t) {
+                Log.d("DetailsActivity", "onFailure: on response");
+            }
+        });
+    }
+
+    public void fetchTrailers(int movieID) {
+        Log.d("Trailers", "fetchTrailers: Movie ID: " + movieID);
+        ApiInterface apiInterface = RetroClient.getClient().create(ApiInterface.class);
+        Call<TrailersJSONResponse> call = apiInterface.getTrailers(movieID, TMDb_API_KEY, LANGUAGE);
+        call.enqueue(new Callback<TrailersJSONResponse>() {
+            @Override
+            public void onResponse(Call<TrailersJSONResponse> call, Response<TrailersJSONResponse> response) {
+                trailers = response.body().getResults();
+            }
+
+            @Override
+            public void onFailure(Call<TrailersJSONResponse> call, Throwable t) {
+                Log.d("DetailsActivity", "onFailure: on response");
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +92,16 @@ public class DetailActivity extends AppCompatActivity {
             String movieTitle = selectedMovie.getTitle();
             movieTitleTV.setText(movieTitle);
 
+            final int movieID = selectedMovie.getId();
+
+            fetchReviews(movieID);
+            //fetchTrailers(movieID);
+
             String movieURL = selectedMovie.getPosterPath();
-            Picasso.with(DetailActivity.this).load(movieURL).error(R.drawable.placeholder_error_downloading_poster).placeholder(R.drawable.placeholder_downloading_poster).into(posterTV);
+            Picasso.with(DetailActivity.this).load(movieURL)
+                    .error(R.drawable.placeholder_error_downloading_poster)
+                    .placeholder(R.drawable.placeholder_downloading_poster)
+                    .into(posterTV);
 
             String movieOverview = selectedMovie.getOverview();
             movieOverviewTV.setText(movieOverview);
@@ -57,6 +118,12 @@ public class DetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             movieReleaseDateTV.setText(formattedDate);
+
+            //if (!reviews.isEmpty()) {
+            ListView reviewsListView = (ListView) findViewById(R.id.review_list_view);
+            ReviewsAdapter reviewsAdapter = new ReviewsAdapter(this, reviews);
+            reviewsListView.setAdapter(reviewsAdapter);
+            //}
         }
     }
 }
