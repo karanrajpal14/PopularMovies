@@ -1,9 +1,12 @@
 package com.example.karan.popularmovies;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -11,11 +14,13 @@ import android.widget.TextView;
 
 import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
+import com.example.karan.popularmovies.data.MovieContract;
 import com.example.karan.popularmovies.data.RetroClient;
 import com.example.karan.popularmovies.data.Reviews;
 import com.example.karan.popularmovies.data.ReviewsJSONResponse;
 import com.example.karan.popularmovies.data.Trailers;
 import com.example.karan.popularmovies.data.TrailersJSONResponse;
+import com.github.zagum.switchicon.SwitchIconView;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
@@ -34,7 +39,14 @@ public class DetailActivity extends AppCompatActivity {
 
     static final String parcelableMovieKey = Movie.class.getSimpleName();
     final String LANGUAGE = "en-US";
-
+    int movieID;
+    String movieTitle;
+    String moviePosterURL;
+    String movieBackdropURL;
+    String movieOverview;
+    String movieRating;
+    String formattedDate = null;
+    String movieReleaseDate;
     List<Reviews> reviews;
     List<Trailers> trailers;
 
@@ -77,6 +89,36 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    public void insertFavMovie() {
+        ContentValues movieValues = new ContentValues();
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_MOVIE_ID, movieID);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_TITLE, movieTitle);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_SYNOPSIS, movieOverview);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_RATING, movieRating);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_RELEASE_DATE, movieReleaseDate);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_POSTER_PATH, moviePosterURL);
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_BACKDROP_PATH, "somerandomURL");
+        movieValues.put(MovieContract.FavoriteMovieEntry.COLUMN_CATEGORY, getString(R.string.pref_sorting_popular_default_value));
+        getContentResolver().insert(MovieContract.FavoriteMovieEntry.CONTENT_URI, movieValues);
+        Log.d("DetailActivity", "insertFavMovie: Movie inserted");
+    }
+
+    public void deleteFavMovie() {
+        int deleted = getContentResolver().delete(MovieContract.FavoriteMovieEntry.buildFavMovieUri(movieID), null, null);
+        Log.d("DetailActivity", "deleteFavMovie: Deleted: " + deleted);
+    }
+
+    public boolean favMoviePresent() {
+        Cursor favMovie = getContentResolver().query(MovieContract.FavoriteMovieEntry.buildFavMovieUri(movieID), null, null, null, null);
+        if (favMovie.moveToNext()) {
+            Log.d("DetailActivity", "favMoviePresent: Movie already in favorites");
+            return true;
+        } else {
+            Log.d("DetailActivity", "favMoviePresent: Movie not in favorites");
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,41 +130,58 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
         TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
         TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
+        View favoritesSwitchButton = findViewById(R.id.favorites_switch_button_detail_activity);
+        final SwitchIconView favoriteSwitch = (SwitchIconView) findViewById(R.id.favorites_switch_icon_detail_activity);
         ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
 
         Movie selectedMovie = this.getIntent().getParcelableExtra(parcelableMovieKey);
 
         if (selectedMovie != null) {
-            String movieTitle = selectedMovie.getTitle();
+            movieTitle = selectedMovie.getTitle();
             movieTitleTV.setText(movieTitle);
 
-            final int movieID = selectedMovie.getId();
+            movieID = selectedMovie.getId();
 
             fetchReviews(movieID);
             //fetchTrailers(movieID);
 
-            String movieURL = selectedMovie.getPosterPath();
-            Picasso.with(DetailActivity.this).load(movieURL)
+            moviePosterURL = selectedMovie.getPosterPath();
+            Picasso.with(DetailActivity.this).load(moviePosterURL)
                     .error(R.drawable.placeholder_error_downloading_poster)
                     .placeholder(R.drawable.placeholder_downloading_poster)
                     .into(posterTV);
 
-            String movieOverview = selectedMovie.getOverview();
+            movieOverview = selectedMovie.getOverview();
             movieOverviewTV.setText(movieOverview);
 
-            String movieRating = String.valueOf(selectedMovie.getVoteAverage());
+            movieRating = String.valueOf(selectedMovie.getVoteAverage());
             ratingBar.setRating(Float.valueOf(movieRating));
 
-            String movieReleaseDate = selectedMovie.getReleaseDate();
-            String formattedDate = null;
+            movieReleaseDate = selectedMovie.getReleaseDate();
+
             try {
                 Date date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(movieReleaseDate);
                 formattedDate = new SimpleDateFormat("dd, MMM yyyy", Locale.getDefault()).format(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
             movieReleaseDateTV.setText(formattedDate);
+            favoriteSwitch.setIconEnabled(favMoviePresent());
+
+            favoritesSwitchButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favoriteSwitch.isIconEnabled()) {
+                        deleteFavMovie();
+                        favoriteSwitch.switchState(true);
+                    } else {
+                        insertFavMovie();
+                        favoriteSwitch.switchState(true);
+                    }
+                }
+            });
         }
     }
 }

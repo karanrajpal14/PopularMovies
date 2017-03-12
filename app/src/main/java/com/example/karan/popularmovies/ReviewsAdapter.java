@@ -20,7 +20,6 @@ public class ReviewsAdapter extends BaseAdapter {
     public ReviewsAdapter(Context context, List<Reviews> reviews) {
         this.context = context;
         this.reviews = reviews;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -40,6 +39,7 @@ public class ReviewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = layoutInflater.inflate(R.layout.review_row_layout, parent, false);
         TextView reviewContentTextView = (TextView) rowView.findViewById(R.id.review_content);
         TextView reviewAuthorTextView = (TextView) rowView.findViewById(R.id.review_author);

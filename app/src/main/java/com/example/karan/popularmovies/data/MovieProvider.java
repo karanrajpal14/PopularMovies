@@ -66,8 +66,7 @@ public class MovieProvider extends ContentProvider {
         );
     }
 
-    private Cursor getFavMovieByID(Uri uri, String[] columns, String sortOrder) {
-        //movie.movie_id = favorite_movie.movie_id AND favorite_movie.movie_id = ?
+    private Cursor getFavMovieByID(Uri uri, String[] columns) {
         String selection = favMovieWithID;
         //Select all rows that belong to a particular category
         String[] selectionArgs = new String[]{MovieContract.FavoriteMovieEntry.getMovieCategoryOrIDFromUri(uri)};
@@ -81,7 +80,7 @@ public class MovieProvider extends ContentProvider {
                 selectionArgs,
                 null,
                 null,
-                sortOrder
+                null
         );
     }
 
@@ -100,7 +99,7 @@ public class MovieProvider extends ContentProvider {
                 break;
             case favorite_movie_with_id:
                 Log.d(TAG, "query case: " + favorite_movie_with_id);
-                resultCursor = getFavMovieByID(uri, projection, sortOrder);
+                resultCursor = getFavMovieByID(uri, projection);
                 break;
             default:
                 throw new UnsupportedOperationException("Invalid query");
@@ -169,11 +168,16 @@ public class MovieProvider extends ContentProvider {
         Log.d(TAG, "delete: started");
 
         //To delete all rows and get a count of how many were affected
-        if (selection == null)
+        if (selection == null) {
             selection = "1";
+            selectionArgs = null;
+        } else {
+            selection = favMovieWithID;
+            selectionArgs = new String[]{MovieContract.FavoriteMovieEntry.getMovieCategoryOrIDFromUri(uri)};
+        }
 
         switch (match) {
-            case favorite_movie:
+            case favorite_movie_with_id:
                 numberOfDeletedRows = database.delete(MovieContract.FavoriteMovieEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
