@@ -46,6 +46,11 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewsJSONResponse> call, Response<ReviewsJSONResponse> response) {
                 reviews = response.body().getResults();
+                if (!reviews.isEmpty()) {
+                    ListView reviewsListView = (ListView) findViewById(R.id.review_list_view);
+                    ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getApplicationContext(), reviews);
+                    reviewsListView.setAdapter(reviewsAdapter);
+                }
             }
 
             @Override
@@ -118,12 +123,6 @@ public class DetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             movieReleaseDateTV.setText(formattedDate);
-
-            //if (!reviews.isEmpty()) {
-            ListView reviewsListView = (ListView) findViewById(R.id.review_list_view);
-            ReviewsAdapter reviewsAdapter = new ReviewsAdapter(this, reviews);
-            reviewsListView.setAdapter(reviewsAdapter);
-            //}
         }
     }
 }

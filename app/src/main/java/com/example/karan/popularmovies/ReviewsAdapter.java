@@ -40,7 +40,7 @@ public class ReviewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = layoutInflater.inflate(R.layout.review_row_layout, parent);
+        View rowView = layoutInflater.inflate(R.layout.review_row_layout, parent, false);
         TextView reviewContentTextView = (TextView) rowView.findViewById(R.id.review_content);
         TextView reviewAuthorTextView = (TextView) rowView.findViewById(R.id.review_author);
 

@@ -86,7 +86,8 @@
             <ListView
                 android:id="@+id/review_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_below="@id/text_view_movie_overview_detail_activity">
 
             </ListView>
 
