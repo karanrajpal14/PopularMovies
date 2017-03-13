@@ -109,13 +109,29 @@
                 android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
                 android:textSize="20sp" />
 
-            <ListView
-                android:id="@+id/review_list_view"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/text_view_movie_overview_detail_activity">
+                android:layout_height="1dp"
+                android:layout_below="@id/text_view_movie_overview_detail_activity"
+                android:background="@android:color/darker_gray" />
 
-            </ListView>
+            <TextView
+                android:id="@+id/reviews_button_detail_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_movie_overview_detail_activity"
+                android:background="?android:selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onClick"
+                android:text="Reviews"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/reviews_button_detail_activity"
+                android:background="@android:color/darker_gray" />
 
         </RelativeLayout>
 
