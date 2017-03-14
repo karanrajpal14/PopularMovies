@@ -109,29 +109,13 @@
                 android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
                 android:textSize="20sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/text_view_movie_overview_detail_activity"
-                android:background="@android:color/darker_gray" />
-
-            <TextView
-                android:id="@+id/reviews_button_detail_activity"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reviews_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_movie_overview_detail_activity"
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="onClick"
-                android:text="Reviews"
-                android:textSize="25sp" />
+                android:layout_below="@id/text_view_movie_overview_detail_activity">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/reviews_button_detail_activity"
-                android:background="@android:color/darker_gray" />
+            </android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
 

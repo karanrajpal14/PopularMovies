@@ -33,7 +33,6 @@
             android:enabled="true"
             android:grantUriPermissions="true" />
 
-        <activity android:name=".ReviewActivity"></activity>
     </application>
 
 </manifest>

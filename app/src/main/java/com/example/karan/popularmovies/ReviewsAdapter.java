@@ -1,59 +1,57 @@
 package com.example.karan.popularmovies;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.karan.popularmovies.data.Reviews;
 
 import java.util.List;
 
-public class ReviewsAdapter extends BaseAdapter {
+public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
-    private Context context;
-    private LayoutInflater layoutInflater;
-    private List<Reviews> reviews;
+    private List<Reviews> reviewsList;
 
-    public ReviewsAdapter(Context context, List<Reviews> reviews) {
-        this.context = context;
-        this.reviews = reviews;
+    public ReviewsAdapter(List<Reviews> reviewsList) {
+        this.reviewsList = reviewsList;
     }
 
     @Override
-    public int getCount() {
-        return reviews.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View reviewView = layoutInflater.inflate(R.layout.review_row_layout, parent, false);
+        return new ViewHolder(reviewView);
     }
 
     @Override
-    public Reviews getItem(int position) {
-        return reviews.get(position);
-    }
+    public void onBindViewHolder(ReviewsAdapter.ViewHolder holder, int position) {
+        Reviews review = reviewsList.get(position);
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = layoutInflater.inflate(R.layout.review_row_layout, parent, false);
-        TextView reviewContentTextView = (TextView) rowView.findViewById(R.id.review_content);
-        TextView reviewAuthorTextView = (TextView) rowView.findViewById(R.id.review_author);
-
-        Reviews review = getItem(position);
-
+        TextView reviewContentTextView = holder.reviewContentTextView;
         reviewContentTextView.setText(review.getContent());
+        TextView reviewAuthorTextView = holder.reviewAuthorTextView;
         reviewAuthorTextView.setText(review.getAuthor());
-
-        return rowView;
     }
 
-    private static class ViewHolder {
-        public TextView reviewContentTextView;
-        public TextView reviewAuthorTextView;
+    @Override
+    public int getItemCount() {
+        return reviewsList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView reviewContentTextView;
+        TextView reviewAuthorTextView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            reviewContentTextView = (TextView) itemView.findViewById(R.id.review_content);
+            reviewAuthorTextView = (TextView) itemView.findViewById(R.id.review_author);
+
+        }
     }
 }

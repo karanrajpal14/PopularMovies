@@ -1,10 +1,11 @@
 package com.example.karan.popularmovies;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
 import com.example.karan.popularmovies.data.MovieContract;
 import com.example.karan.popularmovies.data.RetroClient;
+import com.example.karan.popularmovies.data.Reviews;
+import com.example.karan.popularmovies.data.ReviewsJSONResponse;
 import com.example.karan.popularmovies.data.Trailers;
 import com.example.karan.popularmovies.data.TrailersJSONResponse;
 import com.github.zagum.switchicon.SwitchIconView;
@@ -45,7 +48,32 @@ public class DetailActivity extends AppCompatActivity {
     String movieRating;
     String formattedDate = null;
     String movieReleaseDate;
+    List<Reviews> reviews;
     List<Trailers> trailers;
+
+    public void fetchReviews(int movieID) {
+        Log.d("DetailsActivity", "fetchReviews: Movie ID: " + movieID);
+        ApiInterface apiInterface = RetroClient.getClient().create(ApiInterface.class);
+        Call<ReviewsJSONResponse> call = apiInterface.getReviews(movieID, TMDb_API_KEY, LANGUAGE);
+        call.enqueue(new Callback<ReviewsJSONResponse>() {
+            @Override
+            public void onResponse(Call<ReviewsJSONResponse> call, Response<ReviewsJSONResponse> response) {
+                reviews = response.body().getResults();
+                if (!reviews.isEmpty()) {
+                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
+                    ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviews);
+                    recyclerView.setAdapter(reviewsAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                    Log.d("onResponse", "onResponse: fetch done");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewsJSONResponse> call, Throwable t) {
+                Log.d("DetailsActivity", "onFailure: on response");
+            }
+        });
+    }
 
     public void fetchTrailers(int movieID) {
         Log.d("Trailers", "fetchTrailers: Movie ID: " + movieID);
@@ -118,6 +146,7 @@ public class DetailActivity extends AppCompatActivity {
 
             movieID = selectedMovie.getId();
 
+            fetchReviews(movieID);
             //fetchTrailers(movieID);
 
             moviePosterURL = selectedMovie.getPosterPath();
@@ -157,11 +186,5 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    public void onClick(View view) {
-        Intent reviewsIntent = new Intent(getApplicationContext(), ReviewActivity.class);
-        reviewsIntent.putExtra(ReviewActivity.parcelableReviewKey, movieID);
-        startActivity(reviewsIntent);
     }
 }
