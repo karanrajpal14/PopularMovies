@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,6 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     String movieReleaseDate;
     List<Reviews> reviews;
     List<Trailers> trailers;
+    RecyclerView recyclerView;
 
     public void fetchReviews(int movieID) {
         Log.d("DetailsActivity", "fetchReviews: Movie ID: " + movieID);
@@ -60,10 +62,8 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<ReviewsJSONResponse> call, Response<ReviewsJSONResponse> response) {
                 reviews = response.body().getResults();
                 if (!reviews.isEmpty()) {
-                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
                     ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviews);
                     recyclerView.setAdapter(reviewsAdapter);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                     Log.d("onResponse", "onResponse: fetch done");
                 }
             }
@@ -137,6 +137,10 @@ public class DetailActivity extends AppCompatActivity {
         final SwitchIconView favoriteSwitch = (SwitchIconView) findViewById(R.id.favorites_switch_icon_detail_activity);
         ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
+        recyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         Movie selectedMovie = this.getIntent().getParcelableExtra(parcelableMovieKey);
 

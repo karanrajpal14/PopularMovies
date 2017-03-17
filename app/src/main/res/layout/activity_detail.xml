@@ -109,11 +109,18 @@
                 android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/text_view_reviews_placeholder_detail_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_view_movie_overview_detail_activity"
+                android:text="Reviews:" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/reviews_recycler"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_movie_overview_detail_activity">
+                android:layout_below="@id/text_view_reviews_placeholder_detail_activity">
 
             </android.support.v7.widget.RecyclerView>
 
