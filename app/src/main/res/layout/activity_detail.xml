@@ -26,103 +26,146 @@
             android:paddingBottom="16dp"
             android:paddingTop="?attr/actionBarSize">
 
-            <ImageView
-                android:id="@+id/image_view_poster_detail_activity"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:id="@+id/details_cardView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/text_view_movie_title_detail_activity"
-                android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/image_view_poster_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:id="@+id/text_view_movie_title_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                        android:textSize="25sp" />
+
+                    <RatingBar
+                        android:id="@+id/rating_bar_detail_activity"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_movie_title_detail_activity"
+                        android:layout_marginBottom="16dp"
+                        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                        android:numStars="5" />
+
+                    <TextView
+                        android:id="@+id/text_view_release_date_placeholder_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rating_bar_detail_activity"
+                        android:layout_toRightOf="@id/image_view_poster_detail_activity"
+                        android:text="@string/activity_detail_release_date_placeholder" />
+
+                    <LinearLayout
+                        android:id="@+id/favorites_switch_button_detail_activity"
+                        android:layout_width="30sp"
+                        android:layout_height="30sp"
+                        android:layout_below="@id/rating_bar_detail_activity"
+                        android:layout_marginLeft="25sp"
+                        android:layout_toRightOf="@id/text_view_release_date_placeholder_detail_activity"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.github.zagum.switchicon.SwitchIconView
+                            android:id="@+id/favorites_switch_icon_detail_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5sp"
+                            app:si_animation_duration="1000"
+                            app:si_disabled_color="#9E9E9E"
+                            app:si_enabled="true"
+                            app:si_no_dash="true"
+                            app:si_tint_color="#F44336"
+                            app:srcCompat="@drawable/favorite_heart_button" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/text_view_release_date_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_release_date_placeholder_detail_activity"
+                        android:layout_toRightOf="@id/image_view_poster_detail_activity" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/synopsis_cardView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_toRightOf="@id/image_view_poster_detail_activity"
-                android:textSize="25sp" />
+                android:layout_below="@id/details_cardView"
+                android:layout_marginTop="5dp">
 
-            <RatingBar
-                android:id="@+id/rating_bar_detail_activity"
-                style="?android:attr/ratingBarStyleIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_movie_title_detail_activity"
-                android:layout_marginBottom="16dp"
-                android:layout_toRightOf="@id/image_view_poster_detail_activity"
-                android:numStars="5" />
-
-            <TextView
-                android:id="@+id/text_view_release_date_placeholder_detail_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/rating_bar_detail_activity"
-                android:layout_toRightOf="@id/image_view_poster_detail_activity"
-                android:text="@string/activity_detail_release_date_placeholder" />
-
-            <LinearLayout
-                android:id="@+id/favorites_switch_button_detail_activity"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
-                android:layout_below="@id/rating_bar_detail_activity"
-                android:layout_marginLeft="25sp"
-                android:layout_toRightOf="@id/text_view_release_date_placeholder_detail_activity"
-                android:background="?selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <com.github.zagum.switchicon.SwitchIconView
-                    android:id="@+id/favorites_switch_icon_detail_activity"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5sp"
-                    app:si_animation_duration="1000"
-                    app:si_disabled_color="#9E9E9E"
-                    app:si_enabled="true"
-                    app:si_no_dash="true"
-                    app:si_tint_color="#F44336"
-                    app:srcCompat="@drawable/favorite_heart_button" />
+                    android:padding="10dp">
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/text_view_synopsis_placeholder_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_detail_synopsis_placeholder" />
 
+                    <TextView
+                        android:id="@+id/text_view_movie_overview_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
+                        android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/text_view_release_date_detail_activity"
-                android:layout_width="wrap_content"
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/reviews_cardView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_release_date_placeholder_detail_activity"
-                android:layout_toRightOf="@id/image_view_poster_detail_activity" />
+                android:layout_below="@id/synopsis_cardView"
+                android:layout_marginTop="5dp">
 
-            <TextView
-                android:id="@+id/text_view_synopsis_placeholder_detail_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/image_view_poster_detail_activity"
-                android:text="@string/activity_detail_synopsis_placeholder" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
 
-            <TextView
-                android:id="@+id/text_view_movie_overview_detail_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
-                android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/text_view_reviews_placeholder_detail_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/text_view_reviews_placeholder_detail_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_movie_overview_detail_activity"
-                android:text="Reviews:" />
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/reviews_recycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_reviews_placeholder_detail_activity">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/reviews_recycler"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_view_reviews_placeholder_detail_activity">
+                    </android.support.v7.widget.RecyclerView>
 
-            </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
 
         </RelativeLayout>
 

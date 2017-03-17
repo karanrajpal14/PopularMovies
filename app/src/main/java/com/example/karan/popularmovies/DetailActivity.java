@@ -61,10 +61,14 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ReviewsJSONResponse> call, Response<ReviewsJSONResponse> response) {
                 reviews = response.body().getResults();
+                TextView reviewsPlaceholderTV = (TextView) findViewById(R.id.text_view_reviews_placeholder_detail_activity);
                 if (!reviews.isEmpty()) {
+                    reviewsPlaceholderTV.setText("Reviews:");
                     ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviews);
                     recyclerView.setAdapter(reviewsAdapter);
                     Log.d("onResponse", "onResponse: fetch done");
+                } else {
+                    reviewsPlaceholderTV.setText("No reviews found :(");
                 }
             }
 
@@ -139,6 +143,7 @@ public class DetailActivity extends AppCompatActivity {
         RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
         recyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
