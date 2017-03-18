@@ -125,21 +125,22 @@
                         android:id="@+id/text_view_synopsis_placeholder_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/activity_detail_synopsis_placeholder" />
+                        android:paddingBottom="5sp"
+                        android:text="@string/activity_detail_synopsis_placeholder"
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/text_view_movie_overview_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_view_synopsis_placeholder_detail_activity"
-                        android:textSize="20sp" />
+                        android:layout_below="@id/text_view_synopsis_placeholder_detail_activity" />
 
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/reviews_cardView"
+                android:id="@+id/trailers_cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/synopsis_cardView"
@@ -151,9 +152,39 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/text_view_trailers_placeholder_detil_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="5sp"
+                        android:textSize="20sp" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/trailers_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/text_view_trailers_placeholder_detil_activity" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/reviews_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trailers_cardView"
+                android:layout_marginTop="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                    <TextView
                         android:id="@+id/text_view_reviews_placeholder_detail_activity"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/reviews_recycler"

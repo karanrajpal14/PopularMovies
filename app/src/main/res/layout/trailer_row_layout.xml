@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/trailer_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:id="@+id/trailer_thumbnail_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:paddingBottom="10dp" />
+
+    <LinearLayout
+        android:id="@+id/trailer_play_button_layout"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="?selectableItemBackgroundBorderless"
+        android:orientation="vertical">
+
+        <com.github.zagum.switchicon.SwitchIconView
+            android:id="@+id/trailer_play_switch_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            app:si_animation_duration="1000"
+            app:si_disabled_color="#9E9E9E"
+            app:si_enabled="true"
+            app:si_no_dash="true"
+            app:si_tint_color="#F44336"
+            app:srcCompat="@drawable/play_button" />
+
+    </LinearLayout>
+
+</LinearLayout>

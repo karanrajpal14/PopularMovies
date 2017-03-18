@@ -51,7 +51,8 @@ public class DetailActivity extends AppCompatActivity {
     String movieReleaseDate;
     List<Reviews> reviews;
     List<Trailers> trailers;
-    RecyclerView recyclerView;
+    RecyclerView reviewsRecyclerView;
+    RecyclerView trailersRecyclerView;
 
     public void fetchReviews(int movieID) {
         Log.d("DetailsActivity", "fetchReviews: Movie ID: " + movieID);
@@ -65,7 +66,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (!reviews.isEmpty()) {
                     reviewsPlaceholderTV.setText("Reviews:");
                     ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviews);
-                    recyclerView.setAdapter(reviewsAdapter);
+                    reviewsRecyclerView.setAdapter(reviewsAdapter);
                     Log.d("onResponse", "onResponse: fetch done");
                 } else {
                     reviewsPlaceholderTV.setText("No reviews found :(");
@@ -87,6 +88,23 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TrailersJSONResponse> call, Response<TrailersJSONResponse> response) {
                 trailers = response.body().getResults();
+                /*for (int i = 0; i < trailers.size(); i++) {
+                    if (trailers.get(i).getSite().equals("YouTube")) {
+
+                        Log.d("Trailers: ", "onResponse: " + trailers.get(i).getName());
+                        Log.d("Trailers: ", "onResponse: " + trailers.get(i).getKey());
+
+                    }
+                }*/
+                TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detil_activity);
+                if (!trailers.isEmpty()) {
+                    trailersPlaceholderTV.setText("Trailers:");
+                    TrailersAdapter trailersAdapter = new TrailersAdapter(getBaseContext(), trailers);
+                    trailersRecyclerView.setAdapter(trailersAdapter);
+                    Log.d("onResponse", "onResponse: fetch done");
+                } else {
+                    trailersPlaceholderTV.setText("No trailers found :(");
+                }
             }
 
             @Override
@@ -134,18 +152,25 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbar);
 
-        TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
-        TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
-        TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
-        View favoritesSwitchButton = findViewById(R.id.favorites_switch_button_detail_activity);
+        final TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
+        final TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
+        final TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
+        final View favoritesSwitchButton = findViewById(R.id.favorites_switch_button_detail_activity);
         final SwitchIconView favoriteSwitch = (SwitchIconView) findViewById(R.id.favorites_switch_icon_detail_activity);
-        ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
-        recyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        final ImageView posterTV = (ImageView) findViewById(R.id.image_view_poster_detail_activity);
+        final RatingBar ratingBar = (RatingBar) findViewById(R.id.rating_bar_detail_activity);
+
+        reviewsRecyclerView = (RecyclerView) findViewById(R.id.reviews_recycler);
+        reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewsRecyclerView.setHasFixedSize(true);
+        reviewsRecyclerView.setNestedScrollingEnabled(false);
+        reviewsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        trailersRecyclerView = (RecyclerView) findViewById(R.id.trailers_recycler);
+        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailersRecyclerView.setHasFixedSize(true);
+        trailersRecyclerView.setNestedScrollingEnabled(false);
+        trailersRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         Movie selectedMovie = this.getIntent().getParcelableExtra(parcelableMovieKey);
 
@@ -156,7 +181,7 @@ public class DetailActivity extends AppCompatActivity {
             movieID = selectedMovie.getId();
 
             fetchReviews(movieID);
-            //fetchTrailers(movieID);
+            fetchTrailers(movieID);
 
             moviePosterURL = selectedMovie.getPosterPath();
             Picasso.with(DetailActivity.this).load(moviePosterURL)
