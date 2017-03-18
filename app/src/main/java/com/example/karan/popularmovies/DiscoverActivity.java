@@ -1,10 +1,13 @@
 package com.example.karan.popularmovies;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.karan.popularmovies.data.ApiInterface;
 import com.example.karan.popularmovies.data.Movie;
+import com.example.karan.popularmovies.data.MovieContract;
 import com.example.karan.popularmovies.data.MovieJSONResponse;
 import com.example.karan.popularmovies.data.RetroClient;
 import com.facebook.stetho.Stetho;
@@ -34,6 +38,7 @@ import static com.example.karan.popularmovies.BuildConfig.TMDb_API_KEY;
 public class DiscoverActivity extends AppCompatActivity {
 
     List<Movie> movies = new ArrayList<>();
+    List<Movie> favMoviesList = new ArrayList<>();
     RecyclerView recyclerView;
     DiscoverMovieAdapter movieAdapter;
     SharedPreferences sharedPreferences;
@@ -99,12 +104,21 @@ public class DiscoverActivity extends AppCompatActivity {
         );
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void fetchAllFavMovies() {
+        Cursor favMovies = getContentResolver().query(MovieContract.FavoriteMovieEntry.CONTENT_URI, null, null, null, null, null);
+        while (favMovies.moveToNext()) {
+
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_discover, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -131,6 +145,10 @@ public class DiscoverActivity extends AppCompatActivity {
                 movieAdapter.notifyDataSetChanged();
             } else
                 Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
+        } else if (id == R.id.favorites) {
+            if (isOnline()) {
+                fetchAllFavMovies();
+            }
         }
         return super.onOptionsItemSelected(item);
     }

@@ -88,14 +88,6 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TrailersJSONResponse> call, Response<TrailersJSONResponse> response) {
                 trailers = response.body().getResults();
-                /*for (int i = 0; i < trailers.size(); i++) {
-                    if (trailers.get(i).getSite().equals("YouTube")) {
-
-                        Log.d("Trailers: ", "onResponse: " + trailers.get(i).getName());
-                        Log.d("Trailers: ", "onResponse: " + trailers.get(i).getKey());
-
-                    }
-                }*/
                 TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detil_activity);
                 if (!trailers.isEmpty()) {
                     trailersPlaceholderTV.setText("Trailers:");
