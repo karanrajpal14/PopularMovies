@@ -144,6 +144,7 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
         setSupportActionBar(toolbar);
 
+        final String MOVIE_POSTER_PREFIX = "http://image.tmdb.org/t/p/w342/";
         final TextView movieTitleTV = (TextView) findViewById(R.id.text_view_movie_title_detail_activity);
         final TextView movieOverviewTV = (TextView) findViewById(R.id.text_view_movie_overview_detail_activity);
         final TextView movieReleaseDateTV = (TextView) findViewById(R.id.text_view_release_date_detail_activity);
@@ -176,7 +177,7 @@ public class DetailActivity extends AppCompatActivity {
             fetchTrailers(movieID);
 
             moviePosterURL = selectedMovie.getPosterPath();
-            Picasso.with(DetailActivity.this).load(moviePosterURL)
+            Picasso.with(DetailActivity.this).load(MOVIE_POSTER_PREFIX + moviePosterURL)
                     .error(R.drawable.placeholder_error_downloading_poster)
                     .placeholder(R.drawable.placeholder_downloading_poster)
                     .into(posterTV);

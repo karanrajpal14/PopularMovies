@@ -106,10 +106,29 @@ public class DiscoverActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void fetchAllFavMovies() {
+        favMoviesList.clear();
         Cursor favMovies = getContentResolver().query(MovieContract.FavoriteMovieEntry.CONTENT_URI, null, null, null, null, null);
-        while (favMovies.moveToNext()) {
-
+        while (favMovies.moveToNext() && favMovies.getCount() > 0) {
+            favMoviesList.add(new Movie(
+                    favMovies.getInt(0),
+                    favMovies.getString(1),
+                    favMovies.getString(2),
+                    favMovies.getString(4),
+                    favMovies.getString(5),
+                    favMovies.getString(3),
+                    favMovies.getDouble(6)
+            ));
         }
+        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), favMoviesList, new OnPosterClickListener() {
+            @Override
+            public void onPosterClick(Movie movie) {
+                Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
+                detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
+                startActivity(detailsIntent);
+            }
+        });
+        recyclerView.setAdapter(movieAdapter);
+        Log.d("favMoviesList Size", "fetchAllFavMovies: " + favMoviesList.size());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.karan.popularmovies.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -55,18 +56,26 @@ public class Movie implements Parcelable {
     @Expose
     private Double voteAverage;
 
-    /**
-     * No args constructor for use in serialization
-     */
     public Movie() {
     }
 
+    public Movie(int id, String title, String overview, String posterPath, String backdropPath, String releaseDate, Double voteAverage) {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
+    }
+
     public String getPosterPath() {
-        return "http://image.tmdb.org/t/p/w342" + posterPath;
+        Log.d("Movie", "getPosterPath: " + posterPath);
+        return posterPath;
     }
 
     public void setPosterPath(String posterPath) {
-        this.posterPath = "http://image.tmdb.org/t/p/w342/" + posterPath;
+        this.posterPath = posterPath;
     }
 
     public Movie withPosterPath(String posterPath) {

@@ -17,7 +17,6 @@ import java.util.List;
 public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdapter.ViewHolder> {
     private List<Movie> movies;
     private Context context;
-    private int rowLayout;
     private OnPosterClickListener onPosterClickListener;
 
     public DiscoverMovieAdapter(Context context, List<Movie> movies, OnPosterClickListener onPosterClickListener) {
@@ -72,7 +71,12 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
         public void bind(final Movie movie, final OnPosterClickListener onPosterClickListener) {
             movieName.setText(movie.getTitle());
             Log.d("Adapter", "bind: " + movie.getPosterPath());
-            Picasso.with(context).load(movie.getPosterPath()).resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height).error(R.drawable.placeholder_error_downloading_poster).placeholder(R.drawable.placeholder_downloading_poster).into(moviePoster);
+            String MOVIE_POSTER_PREFIX = "http://image.tmdb.org/t/p/w342/";
+            Picasso.with(context).load(MOVIE_POSTER_PREFIX + movie.getPosterPath())
+                    .resizeDimen(R.dimen.activity_discover_poster_width, R.dimen.activity_discover_poster_height)
+                    .error(R.drawable.placeholder_error_downloading_poster)
+                    .placeholder(R.drawable.placeholder_downloading_poster)
+                    .into(moviePoster);
         }
 
         @Override
