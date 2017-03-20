@@ -152,7 +152,7 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:id="@+id/text_view_trailers_placeholder_detil_activity"
+                        android:id="@+id/text_view_trailers_placeholder_detail_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5sp"
@@ -162,7 +162,7 @@
                         android:id="@+id/trailers_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/text_view_trailers_placeholder_detil_activity" />
+                        android:layout_below="@id/text_view_trailers_placeholder_detail_activity" />
 
                 </RelativeLayout>
 

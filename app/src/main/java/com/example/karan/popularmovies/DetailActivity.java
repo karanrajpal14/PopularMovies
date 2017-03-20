@@ -88,7 +88,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TrailersJSONResponse> call, Response<TrailersJSONResponse> response) {
                 trailers = response.body().getResults();
-                TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detil_activity);
+                TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detail_activity);
                 if (!trailers.isEmpty()) {
                     trailersPlaceholderTV.setText("Trailers:");
                     TrailersAdapter trailersAdapter = new TrailersAdapter(getBaseContext(), trailers);
@@ -160,7 +160,7 @@ public class DetailActivity extends AppCompatActivity {
         reviewsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         trailersRecyclerView = (RecyclerView) findViewById(R.id.trailers_recycler);
-        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         trailersRecyclerView.setHasFixedSize(true);
         trailersRecyclerView.setNestedScrollingEnabled(false);
         trailersRecyclerView.setItemAnimator(new DefaultItemAnimator());
