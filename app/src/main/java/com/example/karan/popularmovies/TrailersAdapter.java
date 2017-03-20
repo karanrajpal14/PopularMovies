@@ -1,5 +1,6 @@
 package com.example.karan.popularmovies;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHolder> {
 
     private static final String YOUTUBE_VIDEO_URL_PREFIX = "https://www.youtube.com/watch?v=";
+    private static final String YOUTUBE_VIDEO_URI_PREFIX = "vnd.youtube:";
     private static final String YOUTUBE_IMAGE_URL_PREFIX = "http://img.youtube.com/vi/";
     private static final String YOUTUBE_IMAGE_URL_SUFFIX = "/0.jpg";
     private List<Trailers> trailersList;
@@ -45,15 +47,20 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
             holder.trailerNameTextView.setText(trailer.getName());
             Picasso.with(context)
                     .load(YOUTUBE_IMAGE_URL_PREFIX + trailerKey + YOUTUBE_IMAGE_URL_SUFFIX)
-                    .into(holder.trailerThumbnailImageview);
+                    .into(holder.trailerThumbnailImageView);
             holder.playIconButton.setIconEnabled(true);
             holder.playIconView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(
-                            new Intent(Intent.ACTION_VIEW,
-                                    Uri.parse(YOUTUBE_VIDEO_URL_PREFIX + trailerKey)
-                            ));
+                    Intent appIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(YOUTUBE_VIDEO_URI_PREFIX + trailerKey));
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(YOUTUBE_VIDEO_URL_PREFIX + trailerKey));
+                    try {
+                        v.getContext().startActivity(appIntent);
+                    } catch (ActivityNotFoundException ex) {
+                        v.getContext().startActivity(webIntent);
+                    }
                 }
             });
         }
@@ -67,14 +74,14 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailersAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView trailerNameTextView;
-        ImageView trailerThumbnailImageview;
+        ImageView trailerThumbnailImageView;
         View playIconView;
         SwitchIconView playIconButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             trailerNameTextView = (TextView) itemView.findViewById(R.id.trailer_name_text_view);
-            trailerThumbnailImageview = (ImageView) itemView.findViewById(R.id.trailer_thumbnail_image_view);
+            trailerThumbnailImageView = (ImageView) itemView.findViewById(R.id.trailer_thumbnail_image_view);
             playIconView = itemView.findViewById(R.id.trailer_play_button_layout);
             playIconButton = (SwitchIconView) itemView.findViewById(R.id.trailer_play_switch_icon);
         }
