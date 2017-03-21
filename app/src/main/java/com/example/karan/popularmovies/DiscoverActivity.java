@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -38,7 +39,6 @@ import static com.example.karan.popularmovies.BuildConfig.TMDb_API_KEY;
 public class DiscoverActivity extends AppCompatActivity {
 
     List<Movie> movies = new ArrayList<>();
-    List<Movie> favMoviesList = new ArrayList<>();
     RecyclerView recyclerView;
     DiscoverMovieAdapter movieAdapter;
     SharedPreferences sharedPreferences;
@@ -47,6 +47,7 @@ public class DiscoverActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Stetho.initializeWithDefaults(this);
+
         setContentView(R.layout.activity_discover);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_discover);
@@ -59,10 +60,35 @@ public class DiscoverActivity extends AppCompatActivity {
 
             RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
             recyclerView.setLayoutManager(layoutManager);
-            loadJSON();
-
+            if (savedInstanceState == null || !savedInstanceState.containsKey("moviesList")) {
+                Log.d("Instance", "onCreate: Instance not found.");
+                loadJSON();
+            } else {
+                Log.d("Instance", "onCreate: Instance found.");
+                movies = savedInstanceState.getParcelableArrayList("moviesList");
+                setMovieAdapter(movies);
+            }
         } else
             Toast.makeText(getApplicationContext(), R.string.activity_discover_connect_to_internet, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("moviesList", (ArrayList<? extends Parcelable>) movies);
+        super.onSaveInstanceState(outState);
+    }
+
+    public void setMovieAdapter(List<Movie> movies) {
+        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movies, new OnPosterClickListener() {
+            @Override
+            public void onPosterClick(Movie movie) {
+                Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
+                detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
+                startActivity(detailsIntent);
+            }
+        });
+        recyclerView.setAdapter(movieAdapter);
+        Log.d("List Size", "setMovieAdapter: " + movies.size());
     }
 
     private void loadJSON(String... sortingParam) {
@@ -84,16 +110,7 @@ public class DiscoverActivity extends AppCompatActivity {
                          @Override
                          public void onResponse(Call<MovieJSONResponse> call, Response<MovieJSONResponse> response) {
                              movies = response.body().getResults();
-                             movieAdapter = new DiscoverMovieAdapter(getBaseContext(), movies, new OnPosterClickListener() {
-                                 @Override
-                                 public void onPosterClick(Movie movie) {
-                                     Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                                     detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
-                                     startActivity(detailsIntent);
-                                 }
-                             });
-                             recyclerView.setAdapter(movieAdapter);
-                             Log.d("Response Received", "onResponse: No of movies received" + movies.size());
+                             setMovieAdapter(movies);
                          }
 
                          @Override
@@ -106,10 +123,10 @@ public class DiscoverActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void fetchAllFavMovies() {
-        favMoviesList.clear();
+        movies.clear();
         Cursor favMovies = getContentResolver().query(MovieContract.FavoriteMovieEntry.CONTENT_URI, null, null, null, null, null);
         while (favMovies.moveToNext() && favMovies.getCount() > 0) {
-            favMoviesList.add(new Movie(
+            movies.add(new Movie(
                     favMovies.getInt(0),
                     favMovies.getString(1),
                     favMovies.getString(2),
@@ -119,16 +136,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     favMovies.getDouble(6)
             ));
         }
-        movieAdapter = new DiscoverMovieAdapter(getBaseContext(), favMoviesList, new OnPosterClickListener() {
-            @Override
-            public void onPosterClick(Movie movie) {
-                Intent detailsIntent = new Intent(getBaseContext(), DetailActivity.class);
-                detailsIntent.putExtra(DetailActivity.parcelableMovieKey, movie);
-                startActivity(detailsIntent);
-            }
-        });
-        recyclerView.setAdapter(movieAdapter);
-        Log.d("favMoviesList Size", "fetchAllFavMovies: " + favMoviesList.size());
+        setMovieAdapter(movies);
     }
 
     @Override

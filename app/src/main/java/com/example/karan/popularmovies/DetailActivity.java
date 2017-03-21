@@ -91,7 +91,7 @@ public class DetailActivity extends AppCompatActivity {
                 TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detail_activity);
                 if (!trailers.isEmpty()) {
                     trailersPlaceholderTV.setText("Trailers:");
-                    TrailersAdapter trailersAdapter = new TrailersAdapter(getBaseContext(), trailers);
+                    TrailersAdapter trailersAdapter = new TrailersAdapter(getApplicationContext(), trailers);
                     trailersRecyclerView.setAdapter(trailersAdapter);
                     Log.d("onResponse", "onResponse: fetch done");
                 } else {
