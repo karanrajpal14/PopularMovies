@@ -6,10 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by karan on 11-Mar-17.
- */
-
 public class Reviews implements Parcelable {
 
     public final static Parcelable.Creator<Reviews> CREATOR = new Creator<Reviews>() {

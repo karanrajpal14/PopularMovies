@@ -125,6 +125,7 @@ public class DiscoverActivity extends AppCompatActivity {
     public void fetchAllFavMovies() {
         movies.clear();
         Cursor favMovies = getContentResolver().query(MovieContract.FavoriteMovieEntry.CONTENT_URI, null, null, null, null, null);
+        assert favMovies != null;
         while (favMovies.moveToNext() && favMovies.getCount() > 0) {
             movies.add(new Movie(
                     favMovies.getInt(0),
@@ -137,6 +138,7 @@ public class DiscoverActivity extends AppCompatActivity {
             ));
         }
         setMovieAdapter(movies);
+        favMovies.close();
     }
 
     @Override
@@ -156,7 +158,7 @@ public class DiscoverActivity extends AppCompatActivity {
                 sharedPreferences.edit()
                         .putString(
                                 getString(R.string.pref_sorting_current_sort_key),
-                                getString(R.string.perf_sorting_top_rated_value)
+                                getString(R.string.pref_sorting_top_rated_value)
                         ).apply();
                 movieAdapter.notifyDataSetChanged();
             } else

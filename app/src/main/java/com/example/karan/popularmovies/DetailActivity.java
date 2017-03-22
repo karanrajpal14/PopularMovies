@@ -64,12 +64,12 @@ public class DetailActivity extends AppCompatActivity {
                 reviews = response.body().getResults();
                 TextView reviewsPlaceholderTV = (TextView) findViewById(R.id.text_view_reviews_placeholder_detail_activity);
                 if (!reviews.isEmpty()) {
-                    reviewsPlaceholderTV.setText("Reviews:");
+                    reviewsPlaceholderTV.setText(getString(R.string.activity_detail_reviews_placeholder));
                     ReviewsAdapter reviewsAdapter = new ReviewsAdapter(reviews);
                     reviewsRecyclerView.setAdapter(reviewsAdapter);
                     Log.d("onResponse", "onResponse: fetch done");
                 } else {
-                    reviewsPlaceholderTV.setText("No reviews found :(");
+                    reviewsPlaceholderTV.setText(getString(R.string.activity_detail_reviews_not_found));
                 }
             }
 
@@ -90,12 +90,12 @@ public class DetailActivity extends AppCompatActivity {
                 trailers = response.body().getResults();
                 TextView trailersPlaceholderTV = (TextView) findViewById(R.id.text_view_trailers_placeholder_detail_activity);
                 if (!trailers.isEmpty()) {
-                    trailersPlaceholderTV.setText("Trailers:");
+                    trailersPlaceholderTV.setText(getString(R.string.activity_detail_trailers_placeholder));
                     TrailersAdapter trailersAdapter = new TrailersAdapter(getApplicationContext(), trailers);
                     trailersRecyclerView.setAdapter(trailersAdapter);
                     Log.d("onResponse", "onResponse: fetch done");
                 } else {
-                    trailersPlaceholderTV.setText("No trailers found :(");
+                    trailersPlaceholderTV.setText(getString(R.string.activity_detail_trailers_not_found));
                 }
             }
 
@@ -127,11 +127,14 @@ public class DetailActivity extends AppCompatActivity {
 
     public boolean favMoviePresent() {
         Cursor favMovie = getContentResolver().query(MovieContract.FavoriteMovieEntry.buildFavMovieUri(movieID), null, null, null, null);
+        assert favMovie != null;
         if (favMovie.moveToNext()) {
             Log.d("DetailActivity", "favMoviePresent: Movie already in favorites");
+            favMovie.close();
             return true;
         } else {
             Log.d("DetailActivity", "favMoviePresent: Movie not in favorites");
+            favMovie.close();
             return false;
         }
     }

@@ -9,7 +9,8 @@
         android:id="@+id/trailer_thumbnail_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:contentDescription="@string/activity_detail_trailer_thumbnail_content_description" />
 
     <LinearLayout
         android:id="@+id/trailer_play_button_layout"

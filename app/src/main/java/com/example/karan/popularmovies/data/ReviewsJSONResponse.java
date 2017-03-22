@@ -8,10 +8,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by karan on 11-Mar-17.
- */
-
 public class ReviewsJSONResponse implements Parcelable {
 
     public final static Parcelable.Creator<ReviewsJSONResponse> CREATOR = new Creator<ReviewsJSONResponse>() {

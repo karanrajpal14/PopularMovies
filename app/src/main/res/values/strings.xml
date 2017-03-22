@@ -6,16 +6,22 @@
     <string name="activity_detail_name">Details</string>
     <string name="activity_detail_release_date_placeholder">Release Date:</string>
     <string name="activity_detail_synopsis_placeholder">Synopsis:</string>
+    <string name="activity_detail_trailers_placeholder">Trailers:</string>
+    <string name="activity_detail_trailers_not_found">No trailers found :(</string>
+    <string name="activity_detail_reviews_placeholder">Reviews:</string>
+    <string name="activity_detail_reviews_not_found">No reviews found :(</string>
+    <string name="activity_detail_poster_content_description">Poster</string>
+    <string name="activity_detail_trailer_thumbnail_content_description">Trailer Thumbnail</string>
 
+    <string name="menu_sort_title">Sort</string>
     <string name="menu_sort_most_popular">Most Popular</string>
     <string name="menu_sort_highest_rated">Highest Rated</string>
     <string name="menu_sort_favorites">Favorites</string>
 
     <string name="pref_sorting_current_sort_key">current_sort</string>
     <string name="pref_sorting_current_sort_value">popular</string>
-    <string name="pref_sorting_popular_key">most_popular</string>
     <string name="pref_sorting_popular_default_value">popular</string>
     <string name="pref_sorting_top_rated_key">top_rated</string>
-    <string name="perf_sorting_top_rated_value">top_rated</string>
+    <string name="pref_sorting_top_rated_value">top_rated</string>
 
 </resources>

@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/activity_detail_poster_content_description"
                 android:scaleType="fitXY" />
 
             <TextView

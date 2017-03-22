@@ -163,7 +163,7 @@ public class MovieProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase database = movieDBHelper.getWritableDatabase();
         final int match = URI_MATCHER.match(uri);
-        int numberOfDeletedRows = 0;
+        int numberOfDeletedRows;
 
         Log.d(TAG, "delete: started");
 

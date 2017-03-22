@@ -43,7 +43,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="16dp"
+                        android:contentDescription="@string/activity_detail_poster_content_description" />
 
                     <TextView
                         android:id="@+id/text_view_movie_title_detail_activity"

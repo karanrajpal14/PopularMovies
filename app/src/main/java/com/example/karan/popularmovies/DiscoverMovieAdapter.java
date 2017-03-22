@@ -25,10 +25,6 @@ public class DiscoverMovieAdapter extends RecyclerView.Adapter<DiscoverMovieAdap
         this.onPosterClickListener = onPosterClickListener;
     }
 
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-    }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bind(movies.get(position), onPosterClickListener);
